@@ -1,0 +1,6 @@
+rootProject.name = 'GDSC-DJU-MSA'
+include 'API-Gateway'
+include 'EurekaServer'
+include 'Discovery-Server'
+include 'Config-Server'
+
