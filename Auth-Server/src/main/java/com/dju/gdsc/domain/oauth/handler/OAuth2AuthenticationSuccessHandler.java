@@ -12,6 +12,7 @@ import com.dju.gdsc.domain.oauth.token.AuthToken;
 import com.dju.gdsc.domain.oauth.token.AuthTokenProvider;
 import com.dju.gdsc.domain.oauth.utils.CookieUtil;
 import com.dju.gdsc.global.properties.AppProperties;
+import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -114,7 +115,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
-
+        // 쿠키 저장
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", accessToken.getToken())
                 .queryParam("refreshToken", refreshToken.getToken())

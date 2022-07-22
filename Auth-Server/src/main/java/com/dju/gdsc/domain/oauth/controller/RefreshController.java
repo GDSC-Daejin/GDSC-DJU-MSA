@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/oauth2")
+@RequestMapping
 @RequiredArgsConstructor
 @Slf4j
 public class RefreshController {

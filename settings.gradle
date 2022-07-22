@@ -3,4 +3,5 @@ include 'API-Gateway'
 include 'EurekaServer'
 include 'Discovery-Server'
 include 'Config-Server'
+include 'Auth-Server'
 

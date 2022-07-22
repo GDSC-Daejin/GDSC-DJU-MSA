@@ -8,40 +8,40 @@ import com.dju.gdsc.domain.member.service.MemberService;
 import com.dju.gdsc.global.dto.ApiResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/oauth2")
+@RequestMapping("/member-route")
 public class MemberApiController {
 
     private final MemberService memberService;
 
 
-
-
-
     @ApiOperation(value = "Member 내용 보기" , notes = "Member 내용 값 보기")
     @GetMapping("/api/guest/v1/me")
-    public ApiResponse getUserV2(@AuthenticationPrincipal User principal) {
-        Member member =memberService.getUserId(principal.getUsername());
+    public ApiResponse getUserV2(@RequestHeader("userId") String userId) {
+        Member member =memberService.getUserId(userId);
         return ApiResponse.success("data" , member);
     }
 
     @ApiOperation(value = "Member 내용 보기" , notes = "MemberInfo 내용 값 보기")
     @GetMapping("/api/guest/v1/info")
-    public ApiResponse getMemberInfo(@AuthenticationPrincipal User principal) {
-
-        MemberInfo memberInfo = memberService.getUserId(principal.getUsername()).getMemberInfo();
+    public ApiResponse getMemberInfo(@RequestHeader("userId") String userId) {
+        System.out.println("userId : " + userId);
+        MemberInfo memberInfo = memberService.getUserId(userId).getMemberInfo();
         return ApiResponse.success("data" , memberInfo);
     }
 
     @ApiOperation(value = "유저 자기 정보 업데이트" , notes = "JWT 토큰값이 들어가야 사용자를 인식 가능함")
     @PutMapping("/api/guest/v1/me")
-    public ApiResponse Update(@AuthenticationPrincipal User principal , @RequestBody MemberInfoRequestDto memberInfo){
-        memberService.정보업데이트(principal.getUsername(),memberInfo);
+    public ApiResponse Update(@RequestHeader("userId") String userId , @RequestBody MemberInfoRequestDto memberInfo){
+        memberService.정보업데이트(userId,memberInfo);
         return ApiResponse.success("message" , "SUCCESS");
     }
 

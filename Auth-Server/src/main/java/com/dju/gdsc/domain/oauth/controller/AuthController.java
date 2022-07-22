@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/oauth2")
+@RequestMapping
 @RequiredArgsConstructor
 public class AuthController {
 
