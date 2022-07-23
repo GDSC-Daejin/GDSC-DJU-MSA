@@ -1,4 +1,4 @@
-package com.dju.gdsc.global.config;
+package com.dju.gdsc.domain.common.config;
 
 
 
