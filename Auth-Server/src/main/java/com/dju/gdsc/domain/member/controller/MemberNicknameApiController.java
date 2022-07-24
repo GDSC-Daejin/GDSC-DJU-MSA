@@ -1,5 +1,7 @@
 package com.dju.gdsc.domain.member.controller;
 
+import com.dju.gdsc.domain.member.dto.MemberInfoResponseServerDto;
+import com.dju.gdsc.domain.member.entity.Member;
 import com.dju.gdsc.domain.member.service.MemberService;
 import com.dju.gdsc.domain.common.dto.ApiResponse;
 import io.swagger.annotations.ApiOperation;
@@ -15,11 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberNicknameApiController {
     private final MemberService memberService;
     @ApiOperation(value = "닉네임 불러오기" , notes = "닉네임을 불러와서 다른 서비스에 바인딩 하기 위해서")
-    @GetMapping("/api/nickname/{userId}")
-    public ApiResponse returnNickname(@PathVariable String userId){
+    @GetMapping("/api/memberInfo/{userId}")
+    public MemberInfoResponseServerDto returnNickname(@PathVariable String userId){
         if(memberService.getUserId(userId) == null){
-            return ApiResponse.fail("message" , "존재하지 않는 유저입니다.");
+            return null;
         }
-        return ApiResponse.success("data" ,memberService.getUserId(userId).getMemberInfo().getNickname());
+        Member member = memberService.getUserId(userId);
+        return MemberInfoResponseServerDto.builder()
+                .nickname(member.getMemberInfo().getNickname())
+                .profileImageUrl(member.getProfileImageUrl())
+                .build();
     }
 }
