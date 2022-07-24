@@ -1,4 +1,4 @@
-package com.dju.gdsc.global.handler;
+package com.dju.gdsc.domain.common.handler;
 
 import com.dju.gdsc.domain.member.model.RoleType;
 import com.dju.gdsc.domain.oauth.token.AuthToken;

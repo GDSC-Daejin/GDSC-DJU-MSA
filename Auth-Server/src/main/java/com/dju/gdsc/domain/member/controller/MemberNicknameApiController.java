@@ -1,7 +1,7 @@
 package com.dju.gdsc.domain.member.controller;
 
 import com.dju.gdsc.domain.member.service.MemberService;
-import com.dju.gdsc.global.dto.ApiResponse;
+import com.dju.gdsc.domain.common.dto.ApiResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

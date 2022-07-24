@@ -1,4 +1,4 @@
-package com.dju.gdsc.global.properties;
+package com.dju.gdsc.domain.common.properties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

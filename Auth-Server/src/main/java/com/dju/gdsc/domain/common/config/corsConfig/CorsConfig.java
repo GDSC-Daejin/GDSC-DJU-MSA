@@ -1,4 +1,4 @@
-package com.dju.gdsc.global.corsConfig;
+package com.dju.gdsc.domain.common.config.corsConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

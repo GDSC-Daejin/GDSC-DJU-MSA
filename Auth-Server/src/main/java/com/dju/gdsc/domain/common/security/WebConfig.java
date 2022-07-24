@@ -1,9 +1,9 @@
-package com.dju.gdsc.global.security;
+package com.dju.gdsc.domain.common.security;
 
 
 import com.dju.gdsc.domain.oauth.handler.TokenValidateInterceptor;
-import com.dju.gdsc.global.handler.AuthorityAdminHandler;
-import com.dju.gdsc.global.handler.AuthorityNotGuestHandler;
+import com.dju.gdsc.domain.common.handler.AuthorityAdminHandler;
+import com.dju.gdsc.domain.common.handler.AuthorityNotGuestHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

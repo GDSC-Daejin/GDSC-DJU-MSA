@@ -5,15 +5,12 @@ import com.dju.gdsc.domain.member.dto.MemberInfoRequestDto;
 import com.dju.gdsc.domain.member.entity.Member;
 import com.dju.gdsc.domain.member.entity.MemberInfo;
 import com.dju.gdsc.domain.member.service.MemberService;
-import com.dju.gdsc.global.dto.ApiResponse;
+import com.dju.gdsc.domain.common.dto.ApiResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
