@@ -25,23 +25,23 @@ public class MemberApiController {
 
     @ApiOperation(value = "Member 내용 보기" , notes = "Member 내용 값 보기")
     @GetMapping("/api/guest/v1/me")
-    public ApiResponse getUserV2(@RequestHeader("userId") String userId) {
-        Member member =memberService.getUserId(userId);
+    public ApiResponse getUserV2(@AuthenticationPrincipal User userId) {
+        Member member =memberService.getUserId(userId.getUsername());
         return ApiResponse.success("data" , member);
     }
 
     @ApiOperation(value = "Member 내용 보기" , notes = "MemberInfo 내용 값 보기")
     @GetMapping("/api/guest/v1/info")
-    public ApiResponse getMemberInfo(@RequestHeader("userId") String userId) {
-        System.out.println("userId : " + userId);
-        MemberInfo memberInfo = memberService.getUserId(userId).getMemberInfo();
+    public ApiResponse getMemberInfo(@AuthenticationPrincipal User userId) {
+
+        MemberInfo memberInfo = memberService.getUserId(userId.getUsername()).getMemberInfo();
         return ApiResponse.success("data" , memberInfo);
     }
 
     @ApiOperation(value = "유저 자기 정보 업데이트" , notes = "JWT 토큰값이 들어가야 사용자를 인식 가능함")
     @PutMapping("/api/guest/v1/me")
-    public ApiResponse Update(@RequestHeader("userId") String userId , @RequestBody MemberInfoRequestDto memberInfo){
-        memberService.정보업데이트(userId,memberInfo);
+    public ApiResponse Update(@AuthenticationPrincipal User userId , @RequestBody MemberInfoRequestDto memberInfo){
+        memberService.정보업데이트(userId.getUsername(),memberInfo);
         return ApiResponse.success("message" , "SUCCESS");
     }
 
