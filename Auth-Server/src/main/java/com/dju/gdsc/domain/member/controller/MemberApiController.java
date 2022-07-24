@@ -52,6 +52,15 @@ public class MemberApiController {
         return ApiResponse.success("data" ,!memberService.닉네임중복검사(nickname));
     }
 
+    @ApiOperation(value = "닉네임 불러오기" , notes = "닉네임을 불러와서 다른 서비스에 바인딩 하기 위해서")
+    @GetMapping ("/api/nickname/{userId}")
+    public ApiResponse returnNickname(@PathVariable String userId){
+        if(memberService.getUserId(userId) == null){
+            return ApiResponse.fail("message" , "존재하지 않는 유저입니다.");
+        }
+        return ApiResponse.success("data" ,memberService.getUserId(userId).getMemberInfo().getNickname());
+    }
+
 
 
 
