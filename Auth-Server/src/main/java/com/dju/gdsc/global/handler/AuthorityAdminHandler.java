@@ -1,9 +1,9 @@
 package com.dju.gdsc.global.handler;
 
-import Gdsc.web.member.model.RoleType;
-import Gdsc.web.oauth.token.AuthToken;
-import Gdsc.web.oauth.token.AuthTokenProvider;
-import Gdsc.web.oauth.utils.HeaderUtil;
+import com.dju.gdsc.domain.member.model.RoleType;
+import com.dju.gdsc.domain.oauth.token.AuthToken;
+import com.dju.gdsc.domain.oauth.token.AuthTokenProvider;
+import com.dju.gdsc.domain.oauth.utils.HeaderUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
