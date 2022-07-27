@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberInfoResponseServerDto {
+    private String userId;
     private String nickname;
     private RoleType role;
     private String profileImageUrl;

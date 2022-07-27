@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/internal/member")
@@ -29,5 +31,14 @@ public class MemberNicknameApiController {
         }
         MemberInfoResponseServerDto memberInfo = memberService.getMemberInfo(userId);
         return memberInfo;
+    }
+
+    @ApiOperation(value = "닉네임 불러오기" , notes = "닉네임을 불러와서 다른 서비스에 바인딩 하기 위해서")
+    @GetMapping("/api/memberInfo")
+    @Cacheable(cacheNames = "memberCaching")
+    public List<MemberInfoResponseServerDto> returnNicknameList(){
+        log.info("호출");
+        List<MemberInfoResponseServerDto> memberInfos = memberService.getMemberInfos();
+        return memberInfos;
     }
 }

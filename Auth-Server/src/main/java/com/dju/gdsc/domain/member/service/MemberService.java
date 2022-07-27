@@ -17,7 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +67,19 @@ public class MemberService {
                 .role(member.getRole())
                 .profileImageUrl(member.getProfileImageUrl())
                 .build();
+        return memberInfoResponseServerDto;
+    }
+    @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "memberCaching", cacheManager = "ehCacheCacheManager")
+    public List<MemberInfoResponseServerDto> getMemberInfos() {
+        List<Member> members = memberRepository.findAll();
+        List<MemberInfoResponseServerDto> memberInfoResponseServerDto = members.stream().map(member ->
+                MemberInfoResponseServerDto.builder()
+                        .userId(member.getUserId())
+                        .nickname(member.getMemberInfo().getNickname())
+                        .role(member.getRole())
+                        .profileImageUrl(member.getProfileImageUrl())
+                        .build()).collect(Collectors.toList());
         return memberInfoResponseServerDto;
     }
     @Transactional
