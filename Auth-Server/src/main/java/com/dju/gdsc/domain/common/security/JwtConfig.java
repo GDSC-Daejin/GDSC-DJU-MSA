@@ -1,4 +1,4 @@
-package com.dju.gdsc.global.security;
+package com.dju.gdsc.domain.common.security;
 
 
 import com.dju.gdsc.domain.oauth.token.AuthTokenProvider;

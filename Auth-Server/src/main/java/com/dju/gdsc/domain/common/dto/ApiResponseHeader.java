@@ -1,4 +1,4 @@
-package com.dju.gdsc.global.dto;
+package com.dju.gdsc.domain.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

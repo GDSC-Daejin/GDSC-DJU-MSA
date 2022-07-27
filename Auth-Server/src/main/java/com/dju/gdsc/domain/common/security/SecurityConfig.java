@@ -1,4 +1,4 @@
-package com.dju.gdsc.global.security;
+package com.dju.gdsc.domain.common.security;
 
 
 
@@ -12,7 +12,7 @@ import com.dju.gdsc.domain.oauth.repository.UserRefreshTokenRepository;
 import com.dju.gdsc.domain.oauth.service.CustomOAuth2UserService;
 import com.dju.gdsc.domain.oauth.service.CustomUserDetailsService;
 import com.dju.gdsc.domain.oauth.token.AuthTokenProvider;
-import com.dju.gdsc.global.properties.AppProperties;
+import com.dju.gdsc.domain.common.properties.AppProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
