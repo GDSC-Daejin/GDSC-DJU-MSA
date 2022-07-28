@@ -2,13 +2,17 @@ package com.dju.gdsc.domain.member.service;
 
 
 import com.dju.gdsc.domain.member.dto.MemberInfoRequestDto;
+import com.dju.gdsc.domain.member.dto.MemberInfoResponseServerDto;
 import com.dju.gdsc.domain.member.entity.Member;
 import com.dju.gdsc.domain.member.entity.MemberInfo;
+import com.dju.gdsc.domain.member.mapper.MemberInfoPublicResponseMapping;
 import com.dju.gdsc.domain.member.model.RoleType;
 import com.dju.gdsc.domain.member.repository.JpaMemberInfoRepository;
 import com.dju.gdsc.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +56,19 @@ public class MemberService {
     public Member getUserId(String userId) {
         return memberRepository.findByUserId(userId);
     }
+    @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "memberCaching", key = "#userId" , cacheManager = "ehCacheCacheManager")
+    public MemberInfoResponseServerDto getMemberInfo(String userId) {
+        Member member = memberRepository.findByUserId(userId);
+        MemberInfoResponseServerDto memberInfoResponseServerDto = MemberInfoResponseServerDto.builder()
+                .nickname(member.getMemberInfo().getNickname())
+                .role(member.getRole())
+                .profileImageUrl(member.getProfileImageUrl())
+                .build();
+        return memberInfoResponseServerDto;
+    }
     @Transactional
+    @CacheEvict(value = "memberInfo", allEntries = true)
     public void 정보업데이트(String userId , MemberInfoRequestDto requestMemberInfo){
         Member member = memberRepository.findByUserId(userId);
         if(member==null) throw new IllegalArgumentException("없는 사용자 입니다. ");
@@ -106,4 +122,6 @@ public class MemberService {
         Member member = memberRepository.findByUserId(userId);
         memberRepository.delete(member);
     }
+
+
 }
