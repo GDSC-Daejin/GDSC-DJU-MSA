@@ -1,8 +1,9 @@
 package com.dju.gdsc.domain.admin.controller;
 
-import Gdsc.web.admin.dto.SupportDto;
-import Gdsc.web.admin.service.SupportService;
-import Gdsc.web.common.dto.ResponseDto;
+
+import com.dju.gdsc.domain.admin.dto.SupportDto;
+import com.dju.gdsc.domain.admin.service.SupportService;
+import com.dju.gdsc.domain.common.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
