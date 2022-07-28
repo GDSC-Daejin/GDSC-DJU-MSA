@@ -56,11 +56,12 @@ public class AdminService {
     public void 경고주기(String fromUser, WarningDto warningDto) {
         Member admin = repository.findByUserId(fromUser);
         Member ToUser = repository.findByUserId(warningDto.getToUser());
-        WarnDescription warnDescription = new WarnDescription();
-        warnDescription.setFromUser(admin);
-        warnDescription.setContent(warningDto.getContent());
-        warnDescription.setTitle(warningDto.getTitle());
-        warnDescription.setToUser(ToUser);
+        WarnDescription warnDescription = WarnDescription.builder()
+                        .title(warningDto.getTitle())
+                        .fromUser(admin)
+                        .toUser(ToUser)
+                        .content(warningDto.getContent())
+                        .build();
         jpaWarnDescription.save(warnDescription);
     }
     // 유효성 검사
