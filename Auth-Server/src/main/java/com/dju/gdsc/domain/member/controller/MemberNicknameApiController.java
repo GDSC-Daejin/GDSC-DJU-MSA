@@ -1,9 +1,7 @@
 package com.dju.gdsc.domain.member.controller;
 
 import com.dju.gdsc.domain.member.dto.MemberInfoResponseServerDto;
-import com.dju.gdsc.domain.member.entity.Member;
 import com.dju.gdsc.domain.member.service.MemberService;
-import com.dju.gdsc.domain.common.dto.ApiResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

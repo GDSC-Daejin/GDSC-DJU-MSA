@@ -11,7 +11,7 @@ import com.dju.gdsc.domain.oauth.repository.UserRefreshTokenRepository;
 import com.dju.gdsc.domain.oauth.token.AuthToken;
 import com.dju.gdsc.domain.oauth.token.AuthTokenProvider;
 import com.dju.gdsc.domain.oauth.utils.CookieUtil;
-import com.dju.gdsc.domain.common.dto.ApiResponse;
+import com.dju.gdsc.domain.common.dto.Response;
 import com.dju.gdsc.domain.common.dto.ResponseDto;
 import com.dju.gdsc.domain.common.properties.AppProperties;
 import io.swagger.annotations.ApiOperation;
@@ -56,7 +56,7 @@ public class AuthController {
     @ApiOperation(value = "로그인 테스트", notes = "로그인 할때 쓰는 놈 Api 테스트 용으로 삭제 예정")
     @PostMapping("/test/auth/login")
     @Profile("!real")
-    public ApiResponse login(
+    public Response login(
             HttpServletRequest request,
             HttpServletResponse response,
             @RequestBody AuthReqModel authReqModel
@@ -101,7 +101,7 @@ public class AuthController {
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
-        return ApiResponse.success("token", accessToken.getToken());
+        return Response.success("token", accessToken.getToken());
     }
 
 

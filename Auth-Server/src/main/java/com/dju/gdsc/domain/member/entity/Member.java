@@ -8,6 +8,7 @@ import com.dju.gdsc.domain.oauth.entity.ProviderType;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,12 +40,12 @@ public class Member {
     private String userId;
 
     @Column(nullable = false)
-    @ApiModelProperty(example = "유형찬")
+    @Schema(description = "회원 이름" , example = "유형찬")
     String username;
-    @ApiModelProperty(example = "$10$8lDyClwH.ET3BA44inQLKuRNISg4paTPwgD2V5pw/RMmtTGJvhPvy")
+    @Schema(description = "회원 비밀번호" , example = "$10$8lDyClwH.ET3BA44inQLKuRNISg4paTPwgD2V5pw/RMmtTGJvhPvy")
     @Column(nullable = false)
     String password;
-    @ApiModelProperty(example = "gudcksegeg@gmail.com")
+    @Schema(description = "회원 이메일" , example = "23@gmail.com")
     @Column(nullable = false)
     String email;
 
@@ -64,7 +65,7 @@ public class Member {
 
 
     @Enumerated(EnumType.STRING)
-    @ApiModelProperty(example = "MEMBER ---Insert 시기본값 GUEST 로 회원가입 넣지말아요")
+    @Schema(description = "회원 권한" , example = "MEMBER")
     private RoleType role; // 멤버 리드
 
 
@@ -82,7 +83,7 @@ public class Member {
     private LocalDateTime modifiedAt;
 
     @CreationTimestamp
-    @ApiModelProperty(example = "2022-01-06 14:57:42.777000 ---Insert 시 자동 삽입 넣지말아요")
+    @Schema(description = "회원 가입 시간" , example = "2022-01-06 14:57:42.777000")
     private LocalDateTime uploadDate;
 
 

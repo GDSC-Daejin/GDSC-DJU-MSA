@@ -7,7 +7,7 @@ import com.dju.gdsc.domain.oauth.repository.UserRefreshTokenRepository;
 import com.dju.gdsc.domain.oauth.token.AuthToken;
 import com.dju.gdsc.domain.oauth.token.AuthTokenProvider;
 import com.dju.gdsc.domain.oauth.utils.HeaderUtil;
-import com.dju.gdsc.domain.common.dto.ApiResponse;
+import com.dju.gdsc.domain.common.dto.Response;
 import com.dju.gdsc.domain.common.properties.AppProperties;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiImplicitParam;
@@ -43,18 +43,18 @@ public class RefreshController {
             @ApiImplicitParam(name = "Authorization", value = "JWT 토큰 Bearer 값 필수 ", required = true, paramType = "header", dataType = "string", defaultValue = "Bearer "),
             @ApiImplicitParam(name = "RefreshToken", value = "refresh 토큰 Bearer 값 필수", required = true, paramType = "header", dataType = "string" ,defaultValue = "Bearer ")
     })
-    public ApiResponse refreshToken (HttpServletRequest request, HttpServletResponse response) {
+    public Response refreshToken (HttpServletRequest request, HttpServletResponse response) {
         // access token 확인
         String accessToken = HeaderUtil.getAccessToken(request);
         AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
         if (!authToken.validateWithOutExpired()) {
-            return ApiResponse.invalidAccessToken();
+            return Response.invalidAccessToken();
         }
 
         // expired access token 인지 확인
         Claims claims = authToken.getExpiredTokenClaims();
         if (claims == null) {
-            return ApiResponse.notExpiredTokenYet();
+            return Response.notExpiredTokenYet();
         }
 
         String userId = claims.getSubject();
@@ -66,13 +66,13 @@ public class RefreshController {
         log.info("refreshToken: {}", refreshToken);
 
         if (!authRefreshToken.validate()) {
-            return ApiResponse.invalidRefreshToken();
+            return Response.invalidRefreshToken();
         }
 
         // userId refresh token 으로 DB 확인
         UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserIdAndRefreshToken(userId, refreshToken);
         if (userRefreshToken == null) {
-            return ApiResponse.invalidRefreshToken();
+            return Response.invalidRefreshToken();
         }
 
         Date now = new Date();
@@ -102,6 +102,6 @@ public class RefreshController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         Map<String,String>  tokenMap = new HashMap<>();
         tokenMap.put("token", newAccessToken.getToken());
-        return ApiResponse.success("data", tokenMap );
+        return Response.success("data", tokenMap );
     }
 }
