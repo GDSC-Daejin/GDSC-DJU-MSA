@@ -7,7 +7,6 @@ import com.dju.gdsc.domain.member.model.RoleType;
 import com.dju.gdsc.domain.oauth.entity.ProviderType;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.hibernate.Hibernate;

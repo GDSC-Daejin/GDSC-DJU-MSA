@@ -6,7 +6,7 @@ import com.dju.gdsc.domain.member.model.PositionType;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,36 +39,38 @@ public class MemberInfo {
     private Member member;
 
     @Column(name = "GDSC_GENERATION")
+    @Schema(description = "유저의 기수" , example = "1")
     private Integer generation;
     @Column
-    @ApiModelProperty(example = "나는 위대한 사람")
+    @Schema(description = "소개" , example = "안녕하세요")
     private String introduce;
 
     @Column(length = 30 ,unique = true)
-    @ApiModelProperty(example = "Rocoli")
+    @Schema(description = "이름" , example = "Rocoli")
     private String nickname;
 
     @Column(length = 30)
-    @ApiModelProperty(example = "010-9132-1234")
+    @Schema(description = "전화번호" , example = "010-9132-1234")
     private String phoneNumber;
 
     @Column
-    @ApiModelProperty(example = "산업경영공학과")
+    @Schema(description = "학과" , example = "산업경영공학과")
     private String major;
 
     @Column(name = "GIT_EMAIL" , length = 30)
-    @ApiModelProperty(example = "gudcks0305")
+    @Schema(description = "GitHub 이메일" , example = "gudcks0305")
     private String gitEmail;
 
     @Column(length = 30)
-    @ApiModelProperty(example = "20177878")
+    @Schema(description = "아이디" , example = "20177878")
     private String studentID;
 
-    @ApiModelProperty(example = "Backend")
     @Column(name = "POSITION_TYPE")
-    private com.dju.gdsc.domain.member.model.PositionType PositionType;
+    @Schema(description = "직책" , example = "Backend")
+    private PositionType PositionType;
 
     @Column(name = "HashTag")
+    @Schema(description = "해시태그" , example = "#안녕하세요")
     private String hashTag;
 
     /*/// not table 속성
@@ -85,7 +87,7 @@ public class MemberInfo {
     private String etcUrl;
 
 
-    @ApiModelProperty(example = "1998-07-09 00:00:00.000000")
+    @Schema(description = "회원 가입일" , example = "1998-07-09 00:00:00.000000")
     private LocalDateTime birthday;
 
     @Column(name = "MODIFIED_AT")
@@ -93,7 +95,7 @@ public class MemberInfo {
     private LocalDateTime modifiedAt;
 
     @CreationTimestamp
-    @ApiModelProperty(example = "2022-01-06 14:57:42.777000 ---Insert 시 자동 삽입 넣지말아요")
+    @Schema(description = "회원 가입일" , example = "1998-07-09 00:00:00.000000")
     private LocalDateTime uploadDate;
 
 
