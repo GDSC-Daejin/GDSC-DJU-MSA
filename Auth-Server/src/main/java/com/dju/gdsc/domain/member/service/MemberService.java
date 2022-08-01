@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberService {
-
     private final MemberRepository memberRepository;
     private final JpaMemberInfoRepository jpaMemberInfoRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;

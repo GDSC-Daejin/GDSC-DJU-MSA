@@ -10,9 +10,9 @@ import com.dju.gdsc.domain.oauth.utils.HeaderUtil;
 import com.dju.gdsc.domain.common.dto.Response;
 import com.dju.gdsc.domain.common.properties.AppProperties;
 import io.jsonwebtoken.Claims;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -38,10 +38,11 @@ public class RefreshController {
     private final static long THREE_DAYS_MSEC = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
     @GetMapping("/refresh")
-    @ApiOperation(value = "refresh 토큰을 이용하여 JWT 토큰 재발급", notes = "토큰이 expired 되어야 작동함")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "JWT 토큰 Bearer 값 필수 ", required = true, paramType = "header", dataType = "string", defaultValue = "Bearer "),
-            @ApiImplicitParam(name = "RefreshToken", value = "refresh 토큰 Bearer 값 필수", required = true, paramType = "header", dataType = "string" ,defaultValue = "Bearer ")
+
+    @Operation(summary = "refresh 토큰을 이용하여 JWT 토큰 재발급", description = "토큰이 expired 되어야 작동함")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "재발급 성공"),
+            @ApiResponse(responseCode = "401", description = "재발급 실패")
     })
     public Response refreshToken (HttpServletRequest request, HttpServletResponse response) {
         // access token 확인

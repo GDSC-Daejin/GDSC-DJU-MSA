@@ -14,7 +14,8 @@ import com.dju.gdsc.domain.oauth.utils.CookieUtil;
 import com.dju.gdsc.domain.common.dto.Response;
 import com.dju.gdsc.domain.common.dto.ResponseDto;
 import com.dju.gdsc.domain.common.properties.AppProperties;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,7 @@ import java.util.Date;
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
+@Tag(name = "사용자 인증 api controller", description = "사용자 인증 api")
 public class AuthController {
 
     private final AppProperties appProperties;
@@ -44,7 +46,7 @@ public class AuthController {
     private final static long THREE_DAYS_MSEC = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
     @Profile("!real")
-    @ApiOperation(value = "회원가입 테스트용", notes = "회원가입 할때 쓰는 놈 Api 테스트 용으로 삭제 예정")
+    @Operation(summary = "회원가입 테스트용", description = "회원가입 할때 쓰는 놈 Api 테스트 용으로 삭제 예정")
     @PostMapping("/test/auth/join")
     public ResponseDto<Integer> join(@RequestBody Member member) {
 
@@ -53,7 +55,7 @@ public class AuthController {
         return new ResponseDto<Integer>(HttpStatus.OK, 1, "성공");
     }
 
-    @ApiOperation(value = "로그인 테스트", notes = "로그인 할때 쓰는 놈 Api 테스트 용으로 삭제 예정")
+    @Operation(summary = "로그인 테스트용", description = "로그인 할때 쓰는 놈 Api 테스트 용으로 삭제 예정")
     @PostMapping("/test/auth/login")
     @Profile("!real")
     public Response login(
