@@ -25,7 +25,9 @@ public class MyExplicitSecurityConfiguration {
                         .pathMatchers("/swagger-ui.html").hasAnyRole("ADMIN", "USER")
                         .pathMatchers("/webjars/**").hasAnyRole("ADMIN", "USER")
                         .pathMatchers("/v3/api-docs/**").hasAnyRole("ADMIN", "USER")
-                        .anyExchange().authenticated()
+                        .pathMatchers("**/api/**").permitAll()
+                        .pathMatchers("/test/**").permitAll()
+                        .pathMatchers("/refresh").permitAll()
                 )
                 .httpBasic().and()
                 .formLogin();
