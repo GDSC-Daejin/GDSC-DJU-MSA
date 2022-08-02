@@ -102,7 +102,7 @@ public class RefreshController {
             userRefreshToken.setRefreshToken(authRefreshToken.getToken());
             userRefreshTokenRepository.save(userRefreshToken);
             CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-            CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), (int) date.getTime());
+            CookieUtil.addCookie(request,response, REFRESH_TOKEN, authRefreshToken.getToken(), (int) date.getTime());
         }
         //CookieUtil.addCookie(response, "Authorization", newAccessToken.getToken(), (int) newAccessToken.getTokenClaims().getExpiration().getTime());
         Map<String,String>  tokenMap = new HashMap<>();
