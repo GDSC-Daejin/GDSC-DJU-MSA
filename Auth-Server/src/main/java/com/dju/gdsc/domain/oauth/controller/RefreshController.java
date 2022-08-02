@@ -6,6 +6,7 @@ import com.dju.gdsc.domain.oauth.entity.UserRefreshToken;
 import com.dju.gdsc.domain.oauth.repository.UserRefreshTokenRepository;
 import com.dju.gdsc.domain.oauth.token.AuthToken;
 import com.dju.gdsc.domain.oauth.token.AuthTokenProvider;
+import com.dju.gdsc.domain.oauth.utils.CookieUtil;
 import com.dju.gdsc.domain.oauth.utils.HeaderUtil;
 import com.dju.gdsc.domain.common.dto.Response;
 import com.dju.gdsc.domain.common.properties.AppProperties;
@@ -26,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN;
 
 @RestController
 @RequestMapping
@@ -51,7 +54,7 @@ public class RefreshController {
         if (!authToken.validateWithOutExpired()) {
             return Response.invalidAccessToken();
         }
-
+        // refresh token 확인
         // expired access token 인지 확인
         Claims claims = authToken.getExpiredTokenClaims();
         if (claims == null) {
@@ -89,18 +92,19 @@ public class RefreshController {
         if (validTime <= THREE_DAYS_MSEC) {
             // refresh 토큰 설정
             long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
-
+            Date date =  new Date(now.getTime() + refreshTokenExpiry);
             authRefreshToken = tokenProvider.createAuthToken(
-                    appProperties.getAuth().getTokenSecret(),
-                    new Date(now.getTime() + refreshTokenExpiry)
+                    appProperties.getAuth().getTokenSecret(),date
+
             );
 
             // DB에 refresh 토큰 업데이트
             userRefreshToken.setRefreshToken(authRefreshToken.getToken());
             userRefreshTokenRepository.save(userRefreshToken);
+            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+            CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), (int) date.getTime());
         }
-        Authentication authentication = tokenProvider.getAuthentication(newAccessToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        //CookieUtil.addCookie(response, "Authorization", newAccessToken.getToken(), (int) newAccessToken.getTokenClaims().getExpiration().getTime());
         Map<String,String>  tokenMap = new HashMap<>();
         tokenMap.put("token", newAccessToken.getToken());
         return Response.success("data", tokenMap );
