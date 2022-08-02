@@ -26,7 +26,6 @@ public class MyExplicitSecurityConfiguration {
                         .pathMatchers("/webjars/**").hasAnyRole("ADMIN", "USER")
                         .pathMatchers("/v3/api-docs/**").hasAnyRole("ADMIN", "USER")
                         .pathMatchers("**/api/**").permitAll()
-                        .pathMatchers("/test/**").permitAll()
                         .pathMatchers("/refresh").permitAll()
                 )
                 .httpBasic().and()
