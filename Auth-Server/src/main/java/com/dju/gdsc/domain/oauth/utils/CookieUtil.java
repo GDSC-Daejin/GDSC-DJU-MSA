@@ -30,6 +30,7 @@ public class CookieUtil {
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
+        cookie.setDomain(".gdsc-dju.com");
         response.addCookie(cookie);
     }
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge , String domain) {
