@@ -22,11 +22,10 @@ public class MyExplicitSecurityConfiguration {
         http
                 .csrf().disable()
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/swagger-ui.html").hasAnyRole("ADMIN", "USER")
-                        .pathMatchers("/webjars/**").hasAnyRole("ADMIN", "USER")
-                        .pathMatchers("/v3/api-docs/**").hasAnyRole("ADMIN", "USER")
-                        .pathMatchers("**/api/**").permitAll()
-                        .pathMatchers("/refresh").permitAll()
+                        .pathMatchers("/swagger-ui.html" , "/webjars/**" ,"/v3/api-docs/**" )
+                        .hasAnyRole("ADMIN", "USER")
+                        .pathMatchers("/**").permitAll()
+                        .pathMatchers("**/api/**" , "/refresh" , "api/**").permitAll()
                 )
                 .httpBasic().and()
                 .formLogin();
