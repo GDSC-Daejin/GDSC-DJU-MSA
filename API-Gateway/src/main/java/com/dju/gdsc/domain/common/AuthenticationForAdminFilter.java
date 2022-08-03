@@ -1,10 +1,8 @@
 package com.dju.gdsc.domain.common;
 
-import com.dju.gdsc.domain.auth.service.LogoutService;
 import com.dju.gdsc.global.token.AuthToken;
 import com.dju.gdsc.global.token.AuthTokenProvider;
 import com.dju.gdsc.global.utils.HeaderUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -16,11 +14,12 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 @Component
 @Slf4j
-@RequiredArgsConstructor
 public class AuthenticationForAdminFilter extends AbstractGatewayFilterFactory<AuthenticationForAdminFilter.Config> {
     private final AuthTokenProvider authTokenProvider;
-    private final LogoutService logoutService;
-
+    public AuthenticationForAdminFilter(AuthTokenProvider authTokenProvider) {
+        super(Config.class);
+        this.authTokenProvider = authTokenProvider;
+    }
     @Override
     public GatewayFilter apply(AuthenticationForAdminFilter.Config config) {
         return (exchange, chain) -> {
@@ -35,10 +34,7 @@ public class AuthenticationForAdminFilter extends AbstractGatewayFilterFactory<A
                 exchange.getResponse().setStatusCode(HttpStatus.valueOf(401));
                 return exchange.getResponse().setComplete();
             }
-            if(logoutService.logout(accessToken) != null){
-                return handleUnAuthorized(exchange);
-            }
-            logoutService.logIn(accessToken);
+           
 
 
             if(!authToken.getTokenClaims().get("role").equals("LEAD") | !authToken.getTokenClaims().get("role").equals("CORE")) {
