@@ -16,17 +16,10 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class AuthenticationForAdminFilter extends AbstractGatewayFilterFactory<AuthenticationForAdminFilter.Config> {
     private final AuthTokenProvider authTokenProvider;
     private final LogoutService logoutService;
-
-    public AuthenticationForAdminFilter(AuthTokenProvider authTokenProvider, LogoutService logoutService) {
-        super(AuthenticationForAdminFilter.Config.class);
-        this.authTokenProvider = authTokenProvider;
-        this.logoutService = logoutService;
-    }
-
-
 
     @Override
     public GatewayFilter apply(AuthenticationForAdminFilter.Config config) {
