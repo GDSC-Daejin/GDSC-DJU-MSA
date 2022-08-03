@@ -36,6 +36,9 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.6.9'
     //
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // 캐시
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation group: 'net.sf.ehcache', name: 'ehcache', version: '2.10.9.2'
 }
 
 dependencyManagement {

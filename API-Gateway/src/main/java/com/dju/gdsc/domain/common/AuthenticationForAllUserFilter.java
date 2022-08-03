@@ -1,5 +1,6 @@
 package com.dju.gdsc.domain.common;
 
+import com.dju.gdsc.domain.auth.service.LogoutService;
 import com.dju.gdsc.global.token.AuthToken;
 import com.dju.gdsc.global.token.AuthTokenProvider;
 import com.dju.gdsc.global.utils.HeaderUtil;
@@ -18,13 +19,13 @@ import reactor.core.publisher.Mono;
 import java.util.Objects;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class AuthenticationForAllUserFilter extends AbstractGatewayFilterFactory<AuthenticationForAllUserFilter.Config> {
     private final AuthTokenProvider authTokenProvider;
-    public AuthenticationForAllUserFilter(AuthTokenProvider authTokenProvider) {
-        super(Config.class);
-        this.authTokenProvider = authTokenProvider;
-    }
+    private final LogoutService logoutService;
+
+    
 
     @Override
     public GatewayFilter apply(Config config) {
@@ -39,7 +40,10 @@ public class AuthenticationForAllUserFilter extends AbstractGatewayFilterFactory
                 exchange.getResponse().setStatusCode(HttpStatus.valueOf(401));
                 return exchange.getResponse().setComplete();
             }
-
+            if(logoutService.logout(accessToken) != null){
+                return handleUnAuthorized(exchange);
+            }
+            logoutService.logIn(accessToken);
             ServerHttpRequest newRequest = request.mutate()
                     .header("userId", (String) authToken.getTokenClaims().get("sub"))
                     .build();
