@@ -19,13 +19,15 @@ import reactor.core.publisher.Mono;
 import java.util.Objects;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class AuthenticationForAllUserFilter extends AbstractGatewayFilterFactory<AuthenticationForAllUserFilter.Config> {
     private final AuthTokenProvider authTokenProvider;
     private final LogoutService logoutService;
-
-    
+    public AuthenticationForAllUserFilter(AuthTokenProvider authTokenProvider, LogoutService logoutService) {
+        super(Config.class);
+        this.authTokenProvider = authTokenProvider;
+        this.logoutService = logoutService;
+    }
 
     @Override
     public GatewayFilter apply(Config config) {
