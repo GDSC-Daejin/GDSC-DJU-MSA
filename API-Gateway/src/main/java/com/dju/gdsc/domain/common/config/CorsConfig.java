@@ -27,11 +27,9 @@ public class CorsConfig {
             if (CorsUtils.isCorsRequest(request)) {
                 ServerHttpResponse response = ctx.getResponse();
                 HttpHeaders headers = response.getHeaders();
-                headers.add("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
                 headers.add("Access-Control-Allow-Methods", ALLOWED_METHODS);
                 headers.add("Access-Control-Max-Age", MAX_AGE); //OPTION how long the results of a preflight request (that is the information contained in the Access-Control-Allow-Methods and Access-Control-Allow-Headers headers) can be cached.
                 headers.add("Access-Control-Allow-Headers", ALLOWED_HEADERS);
-                headers.add("Access-Control-Expose-Headers", EXPOSE_HEADERS);
                 if (request.getMethod() == HttpMethod.OPTIONS) {
                     response.setStatusCode(HttpStatus.OK);
                     return Mono.empty();
