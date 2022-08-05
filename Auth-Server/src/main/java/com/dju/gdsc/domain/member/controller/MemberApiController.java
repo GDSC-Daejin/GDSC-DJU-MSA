@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/member-route")
 @Tag(name = "MemberController - 멤버 컨트롤러 prefix mapping = /member-route" , description = "멤버 컨트롤러")
+@Slf4j
 public class MemberApiController {
 
     private final MemberService memberService;
@@ -39,6 +41,7 @@ public class MemberApiController {
     @GetMapping("/api/guest/v1/me")
     public Response getUserV2(@AuthenticationPrincipal User userId) {
         Member member =memberService.getUserId(userId.getUsername());
+        log.info("member : {}", member);
         return Response.success("data" , member);
     }
 
