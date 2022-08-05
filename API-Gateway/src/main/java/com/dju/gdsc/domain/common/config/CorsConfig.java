@@ -31,7 +31,7 @@ public class CorsConfig {
                 headers.add("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
                 headers.add("Access-Control-Allow-Methods", ALLOWED_METHODS);
                 headers.add("Access-Control-Max-Age", MAX_AGE);
-                headers.add("Access-Control-Allow-Headers",ALLOWED_HEADERS);
+                headers.add("Access-Control-Allow-Headers","*");
                 if (request.getMethod() == HttpMethod.OPTIONS) {
                     response.setStatusCode(HttpStatus.OK);
                     return Mono.empty();
