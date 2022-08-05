@@ -32,7 +32,7 @@ public class CorsConfig {
                 headers.add("Access-Control-Allow-Methods", ALLOWED_METHODS);
                 headers.add("Access-Control-Max-Age", MAX_AGE);
                 headers.add("Access-Control-Allow-Headers","*");
-                headers.add("Access-Control-Allow-Credentials", "true");
+                //headers.add("Access-Control-Allow-Credentials", "true");
                 
                 if (request.getMethod() == HttpMethod.OPTIONS) {
                     response.setStatusCode(HttpStatus.OK);
