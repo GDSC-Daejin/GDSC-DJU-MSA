@@ -30,9 +30,11 @@ public class AuthenticationForAllUserFilter extends AbstractGatewayFilterFactory
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
+            log.info("Request URI: {}", request.getURI());
             if(!request.getHeaders().containsKey("Authorization")){
                 return handleUnAuthorized(exchange);
             }
+            log.info("Request Authorization: {}", request.getHeaders().get("Authorization"));
             String accessToken = HeaderUtil.getAccessToken(request);
             AuthToken authToken = authTokenProvider.convertAuthToken(accessToken);;
             if (!authToken.validate()) {
