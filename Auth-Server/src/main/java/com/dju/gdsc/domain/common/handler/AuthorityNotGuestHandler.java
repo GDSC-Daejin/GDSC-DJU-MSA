@@ -22,9 +22,11 @@ class AuthorityNotGuestHandler implements HandlerInterceptor {
     public boolean preHandle(javax.servlet.http.HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String accessToken = HeaderUtil.getAccessToken(request);
         AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
+        log.info("got authToken: {}", authToken);
         if(!authToken.getTokenClaims().get("role").equals(RoleType.GUEST.getCode())){
             return true;
         }
+        log.info("Forbidden");
         response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
         return false;
     }
