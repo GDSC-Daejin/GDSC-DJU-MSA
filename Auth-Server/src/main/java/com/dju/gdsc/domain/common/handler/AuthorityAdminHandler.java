@@ -22,7 +22,7 @@ public class AuthorityAdminHandler implements HandlerInterceptor {
     public boolean preHandle(javax.servlet.http.HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String accessToken = HeaderUtil.getAccessToken(request);
         AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
-        if(authToken.getTokenClaims().get("role").equals(RoleType.LEAD.getCode()) || authToken.getTokenClaims().get("role").equals(RoleType.CORE.getCode())){
+        if(authToken.getTokenClaims().get("role").equals(RoleType.LEAD) || authToken.getTokenClaims().get("role").equals(RoleType.CORE)){
             return true;
         }
         response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
