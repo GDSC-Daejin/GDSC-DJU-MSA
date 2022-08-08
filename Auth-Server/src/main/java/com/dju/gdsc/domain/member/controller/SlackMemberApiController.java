@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/slack-member-route/")
+@RequestMapping("/member-route/")
 public class SlackMemberApiController {
     private final SlackMemberService slackMemberService;
     public SlackMemberApiController(SlackMemberService slackMemberService) {
