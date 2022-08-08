@@ -37,11 +37,14 @@ public class AuthenticationForAdminFilter extends AbstractGatewayFilterFactory<A
            
 
 
-            if(!authToken.getTokenClaims().get("role").equals("ROLE_LEAD") | !authToken.getTokenClaims().get("role").equals("ROLE_CORE")) {
-                exchange.getResponse().setStatusCode(HttpStatus.valueOf(403));
-                log.info("User is not admin , REQUEST ROLE " + authToken.getTokenClaims().get("role")
-                        + " REQUEST USER ID:  " + authToken.getTokenClaims().get("sub"));
-                return exchange.getResponse().setComplete();
+            if(!authToken.getTokenClaims().get("role").equals("ROLE_LEAD")) {
+                if(!authToken.getTokenClaims().get("role").equals("ROLE_CORE")) {
+                    log.info("User is not admin , REQUEST ROLE " + authToken.getTokenClaims().get("role")
+                            + " REQUEST USER ID:  " + authToken.getTokenClaims().get("sub"));
+                    exchange.getResponse().setStatusCode(HttpStatus.valueOf(403));
+                    return exchange.getResponse().setComplete();
+                }
+
             }
             return chain.filter(exchange);
 
