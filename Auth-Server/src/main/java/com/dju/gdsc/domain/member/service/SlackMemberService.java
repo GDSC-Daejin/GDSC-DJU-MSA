@@ -10,6 +10,7 @@ import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.request.users.UsersListRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,7 +44,7 @@ public class SlackMemberService {
                         .build()).collect(Collectors.toList());
     }
     // 첫번째 slack 연결 후 update 정보 동기화 메소드
-    public void fetchSlackMember() throws SlackApiException, IOException {
+    /*public void fetchSlackMember() throws SlackApiException, IOException {
         List<SlackMemberInfo> slackMemberInfoList = requestGetSlackMember();
         slackMemberInfoRepository.findAll().forEach(member -> {
             if(member.getUserId() != null) {
@@ -57,17 +58,19 @@ public class SlackMemberService {
                 });
             }
         });
-    }
+    }*/
+    @Transactional(readOnly = true)
     public List<SlackMemberInfo> getSlackMember(){
         return slackMemberInfoRepository.findAll();
     }
+    @Transactional
     public void synchronizationSlackMemberWithServerFirst() throws SlackApiException, IOException {
         List<MemberInfo> memberInfoList = jpaMemberInfoRepository.findAll();
         List<SlackMemberInfo> requestGetSlackMemberInfoList = requestGetSlackMember();
         memberInfoList.stream().filter(memberInfo -> memberInfo.getNickname()!=null).forEach(memberInfo -> {
             requestGetSlackMemberInfoList.stream()
-                    .filter(slackMemberInfo -> slackMemberInfo.getSlackDisplayName()
-                            .equals(memberInfo.getNickname())).findFirst()
+                    .filter(slackMemberInfo -> slackMemberInfo.getSlackDisplayName().toUpperCase()
+                            .equals(memberInfo.getNickname().toUpperCase())).findFirst()
                     .ifPresent(slackMemberInfo -> {
                         slackMemberInfo.setUserId(memberInfo.getMember());
                         slackMemberInfoRepository.save(slackMemberInfo);

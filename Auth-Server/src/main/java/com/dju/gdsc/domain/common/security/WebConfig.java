@@ -24,6 +24,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(tokenValidateInterceptor)
                 .addPathPatterns("/member-route/**")
                 .excludePathPatterns("/refresh");
+        registry.addInterceptor(authorityAdminHandler)
+                .addPathPatterns("/slack-member-route/api/admin/**");
         // 이후 접속할 때 권한 검증 인터셉터 추가
 
     }
