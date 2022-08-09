@@ -1,5 +1,6 @@
 package com.dju.gdsc.domain.member.service;
 
+import com.dju.gdsc.domain.member.dto.MemberSlackResponseDto;
 import com.dju.gdsc.domain.member.entity.MemberInfo;
 import com.dju.gdsc.domain.member.entity.SlackMemberInfo;
 import com.dju.gdsc.domain.member.repository.JpaMemberInfoRepository;
@@ -9,6 +10,8 @@ import com.slack.api.methods.MethodsClient;
 import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.request.users.UsersListRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,7 +66,30 @@ public class SlackMemberService {
     public List<SlackMemberInfo> getSlackMember(){
         return slackMemberInfoRepository.findAll();
     }
+    @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "slackMember")
+    public List<MemberSlackResponseDto> getMembers(){
+        List<MemberInfo> memberInfoList = jpaMemberInfoRepository.findAll();
+        List<SlackMemberInfo> slackMemberInfoList = slackMemberInfoRepository.findAll();
+        return memberInfoList.stream()
+                .filter(member -> member.getNickname() != null)
+                .map(member -> {
+                    SlackMemberInfo slackMemberInfo = slackMemberInfoList.stream()
+                            .filter(memberInfo -> memberInfo.getUserId()
+                                    .equals(member.getMember())).findFirst()
+                            .orElse(null);
+                    return MemberSlackResponseDto.builder()
+                            .generation(member.getGeneration())
+                            .introduce(member.getIntroduce())
+                            .nickName(member.getNickname())
+                            .positionType(member.getPositionType())
+                            .roleType(member.getMember().getRole())
+                            .slackImageUrl(slackMemberInfo != null ? slackMemberInfo.getProfileImage512() : null)
+                            .build();
+                }).collect(Collectors.toList());
+    }
     @Transactional
+    @CacheEvict(value = "slackMember", allEntries = true)
     public void synchronizationSlackMemberWithServerFirst() throws SlackApiException, IOException {
         List<MemberInfo> memberInfoList = jpaMemberInfoRepository.findAll();
         List<SlackMemberInfo> requestGetSlackMemberInfoList = requestGetSlackMember();
