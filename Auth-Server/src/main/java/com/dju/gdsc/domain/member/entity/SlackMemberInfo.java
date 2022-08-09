@@ -19,6 +19,7 @@ public class SlackMemberInfo {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private Member userId;
+    private String name;
     private String slackDisplayName;
     private String profileImage72;
     private String profileImage512;

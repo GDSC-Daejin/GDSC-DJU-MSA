@@ -40,6 +40,7 @@ public class SlackMemberService {
                 .filter(member -> !member.isDeleted())
                 .filter(member -> !member.isBot())
                 .map(member -> SlackMemberInfo.builder()
+                        .name(member.getRealName())
                         .slackUserId(member.getId())
                         .slackDisplayName(member.getProfile().getDisplayName())
                         .profileImage72(member.getProfile().getImage72())
@@ -79,7 +80,7 @@ public class SlackMemberService {
                                     .equals(member.getMember())).findFirst()
                             .orElse(null);
                     return MemberSlackResponseDto.builder()
-                            .name(member.getMember().getUsername())
+                            .name(slackMemberInfo != null ? slackMemberInfo.getName(): "")
                             .generation(member.getGeneration())
                             .introduce(member.getIntroduce())
                             .nickName(member.getNickname())
