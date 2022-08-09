@@ -6,13 +6,11 @@ import com.dju.gdsc.domain.admin.service.SupportService;
 import com.dju.gdsc.domain.common.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/member-route/")
 public class SupportApiController {
     private final SupportService supportService;
     @GetMapping("/api/support/limit")
