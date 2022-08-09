@@ -25,7 +25,6 @@ public class AuthenticationForAdminFilter extends AbstractGatewayFilterFactory<A
         return (exchange, chain) -> {
 
             ServerHttpRequest request = exchange.getRequest();
-            log.info("Request URI: {}", request.getURI()  + " " + request.getHeaders().get("Authorization"));
             if(!request.getHeaders().containsKey("Authorization")){
                 return handleUnAuthorized(exchange);
             }
