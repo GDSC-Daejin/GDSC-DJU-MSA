@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/member-route/")
 public class SupportApiController {
     private final SupportService supportService;
-    @GetMapping("/api/support/limit")
+    @GetMapping("/api/v1/support/limit")
     public ResponseDto<SupportDto> list() {
         return new ResponseDto<>(HttpStatus.OK, supportService.지원제한(), "지원제한 정보");
     }
