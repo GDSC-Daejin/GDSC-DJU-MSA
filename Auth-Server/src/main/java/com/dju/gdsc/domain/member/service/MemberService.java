@@ -82,7 +82,7 @@ public class MemberService {
         return memberInfoResponseServerDto;
     }
     @Transactional
-    @CacheEvict(value = "memberInfo", allEntries = true)
+    @CacheEvict(value = "memberCaching", allEntries = true)
     public void 정보업데이트(String userId , MemberInfoRequestDto requestMemberInfo){
         Member member = memberRepository.findByUserId(userId);
         if(member==null) throw new IllegalArgumentException("없는 사용자 입니다. ");
