@@ -79,6 +79,7 @@ public class SlackMemberService {
                                     .equals(member.getMember())).findFirst()
                             .orElse(null);
                     return MemberSlackResponseDto.builder()
+                            .name(member.getMember().getUsername())
                             .generation(member.getGeneration())
                             .introduce(member.getIntroduce())
                             .nickName(member.getNickname())

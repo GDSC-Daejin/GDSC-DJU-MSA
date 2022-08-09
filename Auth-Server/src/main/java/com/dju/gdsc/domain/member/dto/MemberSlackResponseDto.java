@@ -12,6 +12,7 @@ import lombok.Setter;
 public
 class MemberSlackResponseDto {
     String nickName;
+    String name;
     RoleType roleType;
     String slackImageUrl;
     String introduce;
