@@ -7,6 +7,8 @@ import com.slack.api.methods.SlackApiException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +40,12 @@ public class SlackMemberApiController {
     @PostMapping("/api/admin/v1/slackMember")
     public Response postSlackMember() throws  SlackApiException, IOException {
         slackMemberService.synchronizationSlackMemberWithServerFirst();
+        return Response.success("message" , HttpStatus.OK);
+    }
+    @Operation(summary = "슬랙 사용자 정보 스스로 동기화" , description = "사용자 정보를 슬랙 정보와 매칭 시키는 작업 , 닉네임으로 매칭 시킴")
+    @PostMapping("/api/guest/v1/slackMember/self")
+    public Response postSlackMember(@AuthenticationPrincipal User principal) throws  SlackApiException, IOException {
+        slackMemberService.synchronizationSlackMemberSelf(principal.getUsername());
         return Response.success("message" , HttpStatus.OK);
     }
 }

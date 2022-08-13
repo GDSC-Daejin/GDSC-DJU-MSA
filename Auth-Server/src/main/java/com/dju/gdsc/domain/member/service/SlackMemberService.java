@@ -1,9 +1,11 @@
 package com.dju.gdsc.domain.member.service;
 
 import com.dju.gdsc.domain.member.dto.MemberSlackResponseDto;
+import com.dju.gdsc.domain.member.entity.Member;
 import com.dju.gdsc.domain.member.entity.MemberInfo;
 import com.dju.gdsc.domain.member.entity.SlackMemberInfo;
 import com.dju.gdsc.domain.member.repository.JpaMemberInfoRepository;
+import com.dju.gdsc.domain.member.repository.MemberRepository;
 import com.dju.gdsc.domain.member.repository.SlackMemberInfoRepository;
 import com.slack.api.Slack;
 import com.slack.api.methods.MethodsClient;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,12 +28,14 @@ public class SlackMemberService {
     private final MethodsClient slackMethodsClient;
     private final SlackMemberInfoRepository slackMemberInfoRepository;
     private final JpaMemberInfoRepository jpaMemberInfoRepository;
+    private final MemberRepository memberRepository;
     public SlackMemberService(@Value("${slack.bot.token}") String slackToken
             , SlackMemberInfoRepository slackMemberInfoRepository
-            , JpaMemberInfoRepository jpaMemberInfoRepository) {
+            , JpaMemberInfoRepository jpaMemberInfoRepository , MemberRepository memberRepository) {
         this.slackMethodsClient = Slack.getInstance().methods(slackToken);
         this.slackMemberInfoRepository = slackMemberInfoRepository;
         this.jpaMemberInfoRepository = jpaMemberInfoRepository;
+        this.memberRepository = memberRepository;
     }
 
     public List<SlackMemberInfo> requestGetSlackMember() throws SlackApiException, IOException {
@@ -47,22 +52,7 @@ public class SlackMemberService {
                         .profileImage512(member.getProfile().getImage512())
                         .build()).collect(Collectors.toList());
     }
-    // 첫번째 slack 연결 후 update 정보 동기화 메소드
-    /*public void fetchSlackMember() throws SlackApiException, IOException {
-        List<SlackMemberInfo> slackMemberInfoList = requestGetSlackMember();
-        slackMemberInfoRepository.findAll().forEach(member -> {
-            if(member.getUserId() != null) {
-                slackMemberInfoList.stream()
-                        .filter(memberInfo -> memberInfo.getSlackUserId()
-                                .equals(member.getSlackUserId())).findFirst()
-                        .ifPresent(memberInfo -> {
-                            member.setSlackDisplayName(memberInfo.getSlackDisplayName());
-                            member.setProfileImage72(memberInfo.getProfileImage72());
-                            member.setProfileImage512(memberInfo.getProfileImage512());
-                });
-            }
-        });
-    }*/
+
     @Transactional(readOnly = true)
     public List<SlackMemberInfo> getSlackMember(){
         return slackMemberInfoRepository.findAll();
@@ -105,7 +95,20 @@ public class SlackMemberService {
                     });
 
         });
-
-
+    }
+    @Transactional
+    public void synchronizationSlackMemberSelf(String userId) throws SlackApiException, IOException {
+        Member member = memberRepository.findByUserId(userId);
+        if(member.getMemberInfo().getNickname() == null | member.getMemberInfo().getNickname().equals("")){
+            throw  new IllegalArgumentException("잘못된 접근입니다.");
+        }
+        List<SlackMemberInfo> requestGetSlackMemberInfoList = requestGetSlackMember();
+        SlackMemberInfo slackMemberInfo = requestGetSlackMemberInfoList.stream()
+                .filter(memberInfo -> memberInfo.getSlackDisplayName().toUpperCase()
+                        .equals(member.getMemberInfo().getNickname().toUpperCase())).findFirst()
+                // 차후 throw exeption handling 필요
+                .orElseThrow(()-> new IllegalArgumentException("일치하는 사용자가 존재 하지 않습니다."));
+        slackMemberInfo.setUserId(member);
+        slackMemberInfoRepository.save(slackMemberInfo);
     }
 }
