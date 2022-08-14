@@ -18,6 +18,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/member-route")
@@ -71,7 +73,7 @@ public class MemberApiController {
             @ApiResponse(responseCode = "500", description = "서버 에러")
     })
     @PutMapping("/api/guest/v1/me")
-    public Response Update(@AuthenticationPrincipal User userId , @RequestBody MemberInfoRequestDto memberInfo){
+    public Response Update(@AuthenticationPrincipal User userId , @RequestBody MemberInfoRequestDto memberInfo)  {
         memberService.정보업데이트(userId.getUsername(),memberInfo);
         return Response.success("message" , "SUCCESS");
     }

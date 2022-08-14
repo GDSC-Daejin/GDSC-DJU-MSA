@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 @Getter
@@ -88,7 +89,7 @@ public class MemberInfo {
 
 
     @Schema(description = "회원 가입일" , example = "1998-07-09 00:00:00.000000")
-    private LocalDateTime birthday;
+    private Date birthday;
 
     @Column(name = "MODIFIED_AT")
     @LastModifiedDate
