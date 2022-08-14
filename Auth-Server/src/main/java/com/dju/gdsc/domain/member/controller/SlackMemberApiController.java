@@ -47,5 +47,6 @@ public class SlackMemberApiController {
     public Response postSlackMember(@AuthenticationPrincipal User principal) throws  SlackApiException, IOException {
         slackMemberService.synchronizationSlackMemberSelf(principal.getUsername());
         return Response.success("message" , HttpStatus.OK);
+
     }
 }
