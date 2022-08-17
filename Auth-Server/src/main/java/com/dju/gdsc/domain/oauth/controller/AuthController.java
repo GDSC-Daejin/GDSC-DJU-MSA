@@ -5,6 +5,7 @@ import com.dju.gdsc.domain.member.entity.Member;
 import com.dju.gdsc.domain.member.service.MemberService;
 import com.dju.gdsc.domain.oauth.dto.AuthReqModel;
 
+import com.dju.gdsc.domain.oauth.entity.ProviderType;
 import com.dju.gdsc.domain.oauth.entity.UserPrincipal;
 import com.dju.gdsc.domain.oauth.entity.UserRefreshToken;
 import com.dju.gdsc.domain.oauth.repository.UserRefreshTokenRepository;
@@ -23,10 +24,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +43,9 @@ public class AuthController {
     private  final MemberService memberService;
     private final static long THREE_DAYS_MSEC = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
+
+
+
     @Profile("!real")
     @Operation(summary = "회원가입 테스트용", description = "회원가입 할때 쓰는 놈 Api 테스트 용으로 삭제 예정")
     @PostMapping("/test/auth/join")

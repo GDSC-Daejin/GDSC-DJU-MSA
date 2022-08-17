@@ -3,6 +3,7 @@ package com.dju.gdsc.domain.oauth.info.impl;
 
 
 import com.dju.gdsc.domain.oauth.info.OAuth2UserInfo;
+import lombok.Builder;
 
 import java.util.Map;
 
