@@ -1,5 +1,7 @@
 package com.dju.gdsc.domain.oauth.info;
 
+import com.dju.gdsc.domain.oauth.entity.ProviderType;
+
 import java.util.Map;
 
 public abstract class OAuth2UserInfo {
@@ -20,4 +22,6 @@ public abstract class OAuth2UserInfo {
     public abstract String getEmail();
 
     public abstract String getImageUrl();
+
+    public abstract ProviderType getProvider();
 }
