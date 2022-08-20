@@ -33,6 +33,9 @@ public class Oauth2NotWebService {
         OAuth2UserInfo userInfo = oauth2Handler.getUserInfo(provider, code);
         Member member = memberRepository.findByProviderTypeAndUserId(provider, userInfo.getId())
                 .orElseGet(() -> customOAuth2UserService.createUser(userInfo , provider));
+        if(member!= null) customOAuth2UserService.updateUser(member , userInfo);
+
+
         TokenResponseDto token = createNewTokens(member);
         response.addHeader("token", token.getAccessToken());
         response.addHeader("refreshToken", token.getRefreshToken());
