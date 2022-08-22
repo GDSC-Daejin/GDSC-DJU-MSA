@@ -36,6 +36,7 @@ public class Oauth2NotWebService {
         if(member!= null) customOAuth2UserService.updateUser(member , userInfo);
 
         TokenResponseDto token = createNewTokens(member);
+        response.setStatus(HttpServletResponse.SC_OK);
         response.addHeader("token", token.getAccessToken());
         response.addHeader("refreshToken", token.getRefreshToken());
         response.addHeader("expiresIn", String.valueOf(token.getExpireIn()));
