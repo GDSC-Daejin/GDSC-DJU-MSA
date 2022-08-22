@@ -21,18 +21,18 @@ public class GoogleOauthRequester implements OauthRequester {
     @Value("${oauth2.google.code.url}")
     private String GOOGLE_SNS_LOGIN_URL;
     @Value("${oauth2.google.token.url}")
-    private final String GOOGLE_TOKEN_REQUEST_URL;
+    private String GOOGLE_TOKEN_REQUEST_URL;
     @Value("${oauth2.google.info.url}")
-    private final String GOOGLE_SNS_INFO_URL;
+    private String GOOGLE_SNS_INFO_URL;
 
     @Value("${oauth2.google.client-id}")
-    private final String GOOGLE_SNS_CLIENT_ID;
+    private String GOOGLE_SNS_CLIENT_ID;
 
     @Value("${oauth2.google.callback-url}")
-    private final String GOOGLE_SNS_CALLBACK_URL;
+    private String GOOGLE_SNS_CALLBACK_URL;
 
     @Value("${oauth2.google.client-secret}")
-    private final String GOOGLE_SNS_CLIENT_SECRET;
+    private String GOOGLE_SNS_CLIENT_SECRET;
 
 
 
