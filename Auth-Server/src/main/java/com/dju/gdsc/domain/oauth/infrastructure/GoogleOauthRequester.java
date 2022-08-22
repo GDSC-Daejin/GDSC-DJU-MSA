@@ -20,24 +20,26 @@ import java.util.Map;
 public class GoogleOauthRequester implements OauthRequester {
     @Value("${oauth2.google.code.url}")
     private String GOOGLE_SNS_LOGIN_URL;
-    private String GOOGLE_TOKEN_REQUEST_URL = "https://oauth2.googleapis.com/token";
+    @Value("${oauth2.google.token.url}")
+    private final String GOOGLE_TOKEN_REQUEST_URL;
+    @Value("${oauth2.google.info.url}")
+    private final String GOOGLE_SNS_INFO_URL;
+
     @Value("${oauth2.google.client-id}")
-    private String GOOGLE_SNS_CLIENT_ID;
+    private final String GOOGLE_SNS_CLIENT_ID;
 
     @Value("${oauth2.google.callback-url}")
-    private String GOOGLE_SNS_CALLBACK_URL;
+    private final String GOOGLE_SNS_CALLBACK_URL;
 
     @Value("${oauth2.google.client-secret}")
-    private String GOOGLE_SNS_CLIENT_SECRET;
+    private final String GOOGLE_SNS_CLIENT_SECRET;
 
-    @Value("${oauth2.google.scope}")
-    private String GOOGLE_DATA_ACCESS_SCOPE;
+
 
     @Override
     public OAuth2UserInfo getUserInfo(String code) {
         String accessToken = getAccessToken(code);
         return getUserInfoByAccessToken(accessToken);
-        //return new GoogleOAuth2UserInfo(new HashMap<>(Collections.singletonMap("access_token", accessToken)));
     }
     @Override
     public boolean supports(ProviderType provider) {
@@ -73,7 +75,7 @@ public class GoogleOauthRequester implements OauthRequester {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(null, headers);
         headers.add("Authorization", "Bearer " + accessToken);
-        ResponseEntity<Map> response = new RestTemplate().exchange("https://www.googleapis.com/oauth2/v2/userinfo", HttpMethod.GET, request, Map.class);
+        ResponseEntity<Map> response = new RestTemplate().exchange(GOOGLE_SNS_INFO_URL, HttpMethod.GET, request, Map.class);
         if(response.getStatusCode() == HttpStatus.OK) {
             response.getBody().put("sub" , response.getBody().get("id"));
             return new GoogleOAuth2UserInfo(response.getBody());
