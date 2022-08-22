@@ -32,10 +32,10 @@ public class OAuth2AuthorizationRequestBasedOnCookieRepository implements Author
             CookieUtil.deleteCookie(httpServletRequest, httpServletResponse, REDIRECT_URI_PARAM_COOKIE_NAME);
             return;
         }
-        CookieUtil.addCookie(httpServletResponse, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, CookieUtil.serialize(oAuth2AuthorizationRequest), cookieExpireSeconds);
+        CookieUtil.addCookie(httpServletRequest,httpServletResponse, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, CookieUtil.serialize(oAuth2AuthorizationRequest), cookieExpireSeconds);
         String redirectUriAfterLogin = httpServletRequest.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME);
         if (StringUtils.isNotBlank(redirectUriAfterLogin)) {
-            CookieUtil.addCookie(httpServletResponse, REDIRECT_URI_PARAM_COOKIE_NAME, redirectUriAfterLogin, cookieExpireSeconds);
+            CookieUtil.addCookie(httpServletRequest,httpServletResponse, REDIRECT_URI_PARAM_COOKIE_NAME, redirectUriAfterLogin, cookieExpireSeconds);
         }
     }
 

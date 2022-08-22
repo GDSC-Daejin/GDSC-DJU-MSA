@@ -6,13 +6,14 @@ import com.dju.gdsc.domain.oauth.entity.UserRefreshToken;
 import com.dju.gdsc.domain.oauth.repository.UserRefreshTokenRepository;
 import com.dju.gdsc.domain.oauth.token.AuthToken;
 import com.dju.gdsc.domain.oauth.token.AuthTokenProvider;
+import com.dju.gdsc.domain.oauth.utils.CookieUtil;
 import com.dju.gdsc.domain.oauth.utils.HeaderUtil;
-import com.dju.gdsc.domain.common.dto.ApiResponse;
+import com.dju.gdsc.domain.common.dto.Response;
 import com.dju.gdsc.domain.common.properties.AppProperties;
 import io.jsonwebtoken.Claims;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -27,6 +28,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN;
+
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
@@ -38,23 +41,24 @@ public class RefreshController {
     private final static long THREE_DAYS_MSEC = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
     @GetMapping("/refresh")
-    @ApiOperation(value = "refresh 토큰을 이용하여 JWT 토큰 재발급", notes = "토큰이 expired 되어야 작동함")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "JWT 토큰 Bearer 값 필수 ", required = true, paramType = "header", dataType = "string", defaultValue = "Bearer "),
-            @ApiImplicitParam(name = "RefreshToken", value = "refresh 토큰 Bearer 값 필수", required = true, paramType = "header", dataType = "string" ,defaultValue = "Bearer ")
+
+    @Operation(summary = "refresh 토큰을 이용하여 JWT 토큰 재발급", description = "토큰이 expired 되어야 작동함")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "재발급 성공"),
+            @ApiResponse(responseCode = "401", description = "재발급 실패")
     })
-    public ApiResponse refreshToken (HttpServletRequest request, HttpServletResponse response) {
+    public Response refreshToken (HttpServletRequest request, HttpServletResponse response) {
         // access token 확인
         String accessToken = HeaderUtil.getAccessToken(request);
         AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
         if (!authToken.validateWithOutExpired()) {
-            return ApiResponse.invalidAccessToken();
+            return Response.invalidAccessToken();
         }
-
+        // refresh token 확인
         // expired access token 인지 확인
         Claims claims = authToken.getExpiredTokenClaims();
         if (claims == null) {
-            return ApiResponse.notExpiredTokenYet();
+            return Response.notExpiredTokenYet();
         }
 
         String userId = claims.getSubject();
@@ -66,13 +70,13 @@ public class RefreshController {
         log.info("refreshToken: {}", refreshToken);
 
         if (!authRefreshToken.validate()) {
-            return ApiResponse.invalidRefreshToken();
+            return Response.invalidRefreshToken();
         }
 
         // userId refresh token 으로 DB 확인
         UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserIdAndRefreshToken(userId, refreshToken);
         if (userRefreshToken == null) {
-            return ApiResponse.invalidRefreshToken();
+            return Response.invalidRefreshToken();
         }
 
         Date now = new Date();
@@ -88,20 +92,21 @@ public class RefreshController {
         if (validTime <= THREE_DAYS_MSEC) {
             // refresh 토큰 설정
             long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
-
+            Date date =  new Date(now.getTime() + refreshTokenExpiry);
             authRefreshToken = tokenProvider.createAuthToken(
-                    appProperties.getAuth().getTokenSecret(),
-                    new Date(now.getTime() + refreshTokenExpiry)
+                    appProperties.getAuth().getTokenSecret(),date
+
             );
 
             // DB에 refresh 토큰 업데이트
             userRefreshToken.setRefreshToken(authRefreshToken.getToken());
             userRefreshTokenRepository.save(userRefreshToken);
+            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+            CookieUtil.addCookie(request,response, REFRESH_TOKEN, authRefreshToken.getToken(), (int) date.getTime());
         }
-        Authentication authentication = tokenProvider.getAuthentication(newAccessToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        //CookieUtil.addCookie(response, "Authorization", newAccessToken.getToken(), (int) newAccessToken.getTokenClaims().getExpiration().getTime());
         Map<String,String>  tokenMap = new HashMap<>();
         tokenMap.put("token", newAccessToken.getToken());
-        return ApiResponse.success("data", tokenMap );
+        return Response.success("data", tokenMap );
     }
 }

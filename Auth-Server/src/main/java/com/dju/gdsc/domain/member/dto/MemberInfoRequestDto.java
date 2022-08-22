@@ -1,37 +1,32 @@
 package com.dju.gdsc.domain.member.dto;
 
 import com.dju.gdsc.domain.member.model.PositionType;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
 public class MemberInfoRequestDto {
 
-
+    @Schema(description = "기수" , example = "1")
     private Integer generation;
-    @ApiModelProperty(example = "나는 위대한 사람")
+    @Schema(description = "소개" , example = "안녕하세요 잘부탁드립니다.")
     private String introduce;
-
-    @ApiModelProperty(example = "Rocoli")
+    @Schema(description = "영어이름" , example = "Jason")
     private String nickname;
-
-    @ApiModelProperty(example = "010-9132-1234")
+    @Schema(description = "전번" , example = "010-9132-1234")
     private String phoneNumber;
-
-    @ApiModelProperty(example = "산업경영공학과")
+    @Schema(description = "전공" , example = "컴퓨터공학")
     private String major;
-
-    @ApiModelProperty(example = "gudcks0305")
+    @Schema(description = "깃허브 이메일?" , example = "gudcks305@gmail.com")
     private String gitEmail;
-
-    @ApiModelProperty(example = "20177878")
+    @Schema(description = "학번" , example = "20171245")
     private String studentID;
-
-    @ApiModelProperty(example = "Backend")
+    @Schema(description = "멤버인지 코어인지 리드인지" , example = "CORE")
     private PositionType positionType;
     private String hashTag;
     private String gitHubUrl;
@@ -39,8 +34,7 @@ public class MemberInfoRequestDto {
     private String etcUrl;
 
 
-    @ApiModelProperty(example = "1998-07-09 00:00:00.000000")
-    private LocalDateTime birthday;
+    private Date birthday;
 
 
 }
