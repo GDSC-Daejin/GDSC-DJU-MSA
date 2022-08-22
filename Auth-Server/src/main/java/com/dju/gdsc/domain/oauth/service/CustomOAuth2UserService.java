@@ -11,6 +11,9 @@ import com.dju.gdsc.domain.oauth.exception.OAuthProviderMissMatchException;
 import com.dju.gdsc.domain.oauth.info.OAuth2UserInfo;
 import com.dju.gdsc.domain.oauth.info.OAuth2UserInfoFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 
@@ -63,8 +66,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         return UserPrincipal.create(savedUser, user.getAttributes());
     }
-
-    private Member createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
+    @CacheEvict(cacheNames = "memberCaching", key = "#userInfo.id")
+    public Member createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
         LocalDateTime now = LocalDateTime.now();
         MemberInfo memberInfo = new MemberInfo();
         Member user = new Member(
@@ -84,8 +87,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 멤버 info 도 같이 만들기
         return memberRepository.saveAndFlush(user);
     }
-
-    private Member updateUser(Member user, OAuth2UserInfo userInfo) {
+    @CachePut(cacheNames = "memberCaching", key = "#userInfo.id")
+    public Member updateUser(Member user, OAuth2UserInfo userInfo) {
         if (userInfo.getName() != null && !user.getUsername().equals(userInfo.getName())) {
             user.setUsername(userInfo.getName());
         }

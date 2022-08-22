@@ -7,6 +7,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.Optional;
 
 public class CookieUtil {
@@ -24,12 +25,17 @@ public class CookieUtil {
         return Optional.empty();
     }
 
-    public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
+    public static void addCookie(HttpServletRequest request,HttpServletResponse response, String name, String value, int maxAge) {
 
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
+
+        if(request.getRequestURL().toString().contains("gdsc-dju.com")){
+            cookie.setDomain("gdsc-dju.com");
+        }
+        //cookie.setDomain("gdsc-dju.com");
         response.addCookie(cookie);
     }
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge , String domain) {
