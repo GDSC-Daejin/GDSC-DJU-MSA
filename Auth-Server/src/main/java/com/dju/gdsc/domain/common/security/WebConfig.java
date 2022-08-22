@@ -23,7 +23,9 @@ public class WebConfig implements WebMvcConfigurer {
         // 처음 접속할 때 토큰 검증 인터셉터 추가
         registry.addInterceptor(tokenValidateInterceptor)
                 .addPathPatterns("/member-route/**")
-                .excludePathPatterns("/refresh");
+                .excludePathPatterns("/member-route/api/v1/**");
+        registry.addInterceptor(authorityAdminHandler)
+                .addPathPatterns("/member-route/api/admin/**");
         // 이후 접속할 때 권한 검증 인터셉터 추가
 
     }

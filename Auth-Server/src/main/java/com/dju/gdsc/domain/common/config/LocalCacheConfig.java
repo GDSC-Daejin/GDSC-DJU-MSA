@@ -30,14 +30,26 @@ public class LocalCacheConfig {
                 .maxEntriesLocalHeap(0)
                 .memoryStoreEvictionPolicy("LRU")
                 .name("memberCaching");
+        CacheConfiguration slackMemberCacheConfiguration = new CacheConfiguration()
+                .eternal(false)
+                .timeToIdleSeconds(0)
+                .timeToLiveSeconds(1800)
+                .maxEntriesLocalHeap(0)
+                .memoryStoreEvictionPolicy("LRU")
+                .name("slackMember");
         // 설정을 가지고 캐시 생성
         Cache layoutCache = new net.sf.ehcache.Cache(layoutCacheConfiguration);
-
+        Cache slackMemberCache = new net.sf.ehcache.Cache(slackMemberCacheConfiguration);
         // 캐시 팩토리에 생성한 eh캐시를 추가
         Objects.requireNonNull(cacheManagerFactoryBean().getObject()).addCache(layoutCache);
+        Objects.requireNonNull(cacheManagerFactoryBean().getObject()).addCache(slackMemberCache);
         // 캐시 팩토리를 넘겨서 eh캐시 매니저 생성
         return new EhCacheCacheManager(Objects.requireNonNull(cacheManagerFactoryBean().getObject()));
     }
+
+
+        // 캐시 설정
+
 }
     /*
         EhCacheManagerFactoryBean	CacacheManager의 적절한 관리 및 인스턴스를 제공하는데 필요하며 EhCache 설정 리소스를 구성한다.
