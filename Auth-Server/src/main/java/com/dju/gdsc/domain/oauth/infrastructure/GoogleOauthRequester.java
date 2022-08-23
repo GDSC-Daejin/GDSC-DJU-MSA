@@ -1,6 +1,7 @@
 package com.dju.gdsc.domain.oauth.infrastructure;
 
 import com.dju.gdsc.domain.oauth.entity.ProviderType;
+import com.dju.gdsc.domain.oauth.exception.Oauth2UserInfoNotFoundExeption;
 import com.dju.gdsc.domain.oauth.info.OAuth2UserInfo;
 import com.dju.gdsc.domain.oauth.info.impl.GoogleOAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +67,7 @@ public class GoogleOauthRequester implements OauthRequester {
         if(response.getStatusCode() == HttpStatus.OK) {
             return response.getBody().get("access_token").toString();
         } else {
-            throw new RuntimeException("INGRANT CODE EXECPTION");
+            throw new Oauth2UserInfoNotFoundExeption("Invalid Code exception");
         }
 
     }
@@ -80,7 +81,7 @@ public class GoogleOauthRequester implements OauthRequester {
             response.getBody().put("sub" , response.getBody().get("id"));
             return new GoogleOAuth2UserInfo(response.getBody());
         } else {
-            return null;
+            throw new Oauth2UserInfoNotFoundExeption("USER INFO NOT FOUND");
         }
 
     }
