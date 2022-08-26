@@ -1,5 +1,6 @@
 package com.dju.gdsc.domain.member.dto;
 
+import com.dju.gdsc.domain.member.model.PositionType;
 import com.dju.gdsc.domain.member.model.RoleType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -22,4 +23,7 @@ public class MemberInfoResponseServerDto {
     @Schema(description = "회원 프로필 이미지 링크" , example = "https://www.google.com/~~~~~")
     private String profileImageUrl;
     private String hashTag;
+    String introduce;
+    PositionType positionType;
+
 }

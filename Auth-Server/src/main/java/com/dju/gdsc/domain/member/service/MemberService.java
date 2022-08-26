@@ -72,6 +72,8 @@ public class MemberService {
                 .nickname(member.getMemberInfo().getNickname())
                 .role(member.getRole())
                 .profileImageUrl(slackMemberInfo == null ? member.getProfileImageUrl() : slackMemberInfo.getProfileImage512())
+                .positionType(member.getMemberInfo().getPositionType())
+                .introduce(member.getMemberInfo().getIntroduce())
                 .build();
         return memberInfoResponseServerDto;
     }
@@ -107,7 +109,6 @@ public class MemberService {
 
         memberInfo.setIntroduce(requestMemberInfo.getIntroduce());
         memberInfo.setBirthday(requestMemberInfo.getBirthday());
-
         memberInfo.setGeneration(requestMemberInfo.getGeneration());
         memberInfo.setHashTag(requestMemberInfo.getHashTag());
         // 정규식 체크 데이터 유효성 검사
