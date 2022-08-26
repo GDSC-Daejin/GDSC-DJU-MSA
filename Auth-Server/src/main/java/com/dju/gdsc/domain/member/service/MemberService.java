@@ -5,6 +5,8 @@ import com.dju.gdsc.domain.member.dto.MemberInfoRequestDto;
 import com.dju.gdsc.domain.member.dto.MemberInfoResponseServerDto;
 import com.dju.gdsc.domain.member.entity.Member;
 import com.dju.gdsc.domain.member.entity.MemberInfo;
+import com.dju.gdsc.domain.member.entity.SlackMemberInfo;
+import com.dju.gdsc.domain.member.exeption.UserNotFoundException;
 import com.dju.gdsc.domain.member.mapper.MemberInfoPublicResponseMapping;
 import com.dju.gdsc.domain.member.model.RoleType;
 import com.dju.gdsc.domain.member.repository.JpaMemberInfoRepository;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final SlackMemberService  slackMemberService;
     private final JpaMemberInfoRepository jpaMemberInfoRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -63,10 +66,14 @@ public class MemberService {
     @Cacheable(cacheNames = "memberCaching", key = "#userId" , cacheManager = "ehCacheCacheManager")
     public MemberInfoResponseServerDto getMemberInfo(String userId) {
         Member member = memberRepository.findByUserId(userId);
+        SlackMemberInfo slackMemberInfo = slackMemberService.getSlackMemberByUserId(member);
         MemberInfoResponseServerDto memberInfoResponseServerDto = MemberInfoResponseServerDto.builder()
+                .userId(member.getUserId())
                 .nickname(member.getMemberInfo().getNickname())
                 .role(member.getRole())
-                .profileImageUrl(member.getProfileImageUrl())
+                .profileImageUrl(slackMemberInfo == null ? member.getProfileImageUrl() : slackMemberInfo.getProfileImage512())
+                .positionType(member.getMemberInfo().getPositionType())
+                .introduce(member.getMemberInfo().getIntroduce())
                 .build();
         return memberInfoResponseServerDto;
     }
@@ -74,13 +81,23 @@ public class MemberService {
     @Cacheable(cacheNames = "memberCaching", cacheManager = "ehCacheCacheManager")
     public List<MemberInfoResponseServerDto> getMemberInfos() {
         List<Member> members = memberRepository.findAll();
+        List<SlackMemberInfo> slackMemberInfos = slackMemberService.getSlackMember();
         List<MemberInfoResponseServerDto> memberInfoResponseServerDto = members.stream().map(member ->
-                MemberInfoResponseServerDto.builder()
-                        .userId(member.getUserId())
-                        .nickname(member.getMemberInfo().getNickname())
-                        .role(member.getRole())
-                        .profileImageUrl(member.getProfileImageUrl())
-                        .build()).collect(Collectors.toList());
+                slackMemberInfos.stream().filter(slackMemberInfo -> slackMemberInfo.getUserId().equals(member))
+                        .map(slackMemberInfo -> MemberInfoResponseServerDto.builder()
+                                .userId(member.getUserId())
+                                .nickname(member.getMemberInfo().getNickname())
+                                .role(member.getRole())
+                                .profileImageUrl(slackMemberInfo.getProfileImage512())
+                                .build())
+                        .findFirst()
+                        .orElse(MemberInfoResponseServerDto.builder()
+                                .userId(member.getUserId())
+                                .nickname(member.getMemberInfo().getNickname())
+                                .role(member.getRole())
+                                .profileImageUrl(member.getProfileImageUrl())
+                                .build())
+                ).collect(Collectors.toList());
         return memberInfoResponseServerDto;
     }
     @Transactional
@@ -92,7 +109,6 @@ public class MemberService {
 
         memberInfo.setIntroduce(requestMemberInfo.getIntroduce());
         memberInfo.setBirthday(requestMemberInfo.getBirthday());
-
         memberInfo.setGeneration(requestMemberInfo.getGeneration());
         memberInfo.setHashTag(requestMemberInfo.getHashTag());
         // 정규식 체크 데이터 유효성 검사
@@ -140,4 +156,9 @@ public class MemberService {
     }
 
 
+    public MemberInfoResponseServerDto getMemberInfoByNickname(String nickname) {
+        Member member = memberRepository.findByMemberInfo_Nickname(nickname).orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+        MemberInfoResponseServerDto memberInfoResponseServerDto = getMemberInfo(member.getUserId());
+        return memberInfoResponseServerDto;
+    }
 }

@@ -25,4 +25,6 @@ public interface MemberRepository extends JpaRepository<Member, Integer>, Custom
     boolean existsByMemberInfo_Nickname(String updateNickname);
     boolean existsByMemberInfo_NicknameAndMemberInfo_NicknameNot(String updateNickname , String nickname);
     boolean deleteByEmail(String s);
+
+    Optional<Member> findByMemberInfo_Nickname(String nickname);
 }
