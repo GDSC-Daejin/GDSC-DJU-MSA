@@ -5,6 +5,7 @@ import com.dju.gdsc.domain.member.dto.MemberInfoRequestDto;
 import com.dju.gdsc.domain.member.dto.MemberInfoResponseServerDto;
 import com.dju.gdsc.domain.member.entity.Member;
 import com.dju.gdsc.domain.member.entity.MemberInfo;
+import com.dju.gdsc.domain.member.exeption.UserNotFoundException;
 import com.dju.gdsc.domain.member.mapper.MemberInfoPublicResponseMapping;
 import com.dju.gdsc.domain.member.model.RoleType;
 import com.dju.gdsc.domain.member.repository.JpaMemberInfoRepository;
@@ -140,4 +141,15 @@ public class MemberService {
     }
 
 
+    public MemberInfoResponseServerDto getMemberInfoByNickname(String nickname) {
+        Member member = memberRepository.findByMemberInfo_Nickname(nickname).orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
+        MemberInfoResponseServerDto memberInfoResponseServerDto = MemberInfoResponseServerDto.builder()
+                .userId(member.getUserId())
+                .nickname(member.getMemberInfo().getNickname())
+                .role(member.getRole())
+                .profileImageUrl(member.getProfileImageUrl())
+                .hashTag(member.getMemberInfo().getHashTag())
+                .build();
+        return memberInfoResponseServerDto;
+    }
 }

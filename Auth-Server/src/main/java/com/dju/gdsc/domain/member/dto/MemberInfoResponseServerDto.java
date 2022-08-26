@@ -21,4 +21,5 @@ public class MemberInfoResponseServerDto {
     private RoleType role;
     @Schema(description = "회원 프로필 이미지 링크" , example = "https://www.google.com/~~~~~")
     private String profileImageUrl;
+    private String hashTag;
 }
