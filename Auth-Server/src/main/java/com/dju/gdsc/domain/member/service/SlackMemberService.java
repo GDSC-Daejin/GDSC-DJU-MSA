@@ -58,6 +58,10 @@ public class SlackMemberService {
         return slackMemberInfoRepository.findAll();
     }
     @Transactional(readOnly = true)
+    public SlackMemberInfo getSlackMemberByUserId(Member userId){
+        return slackMemberInfoRepository.findByUserId(userId);
+    }
+    @Transactional(readOnly = true)
     @Cacheable(cacheNames = "slackMember")
     public List<MemberSlackResponseDto> getMembers(){
         List<MemberInfo> memberInfoList = jpaMemberInfoRepository.findAll();
