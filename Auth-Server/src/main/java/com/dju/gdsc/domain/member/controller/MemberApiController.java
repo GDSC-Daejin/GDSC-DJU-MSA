@@ -43,7 +43,6 @@ public class MemberApiController {
     @GetMapping("/api/guest/v1/me")
     public Response getUserV2(@AuthenticationPrincipal User userId) {
         Member member =memberService.getUserId(userId.getUsername());
-        log.info("member : {}", member);
         return Response.success("data" , member);
     }
 

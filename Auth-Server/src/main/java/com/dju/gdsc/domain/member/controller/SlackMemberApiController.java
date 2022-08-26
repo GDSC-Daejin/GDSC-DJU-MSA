@@ -32,7 +32,6 @@ public class SlackMemberApiController {
 
     @Operation(summary = "슬랙 사용자 정보 불러오기" , description = "슬랙 사용자 정보 불러오기 google 로그인 후 슬랙 유저와 동기화 한 유저만")
     @GetMapping("/api/v1/members")
-
     public Response getMember()  {
         return Response.success("data" , slackMemberService.getMembers());
     }
