@@ -43,6 +43,7 @@ public class AuthController {
     private  final MemberService memberService;
     private final static long THREE_DAYS_MSEC = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
+    private final static String ACCESS_TOKEN = "Authorization";
 
 
 
@@ -75,6 +76,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         Date now = new Date();
+
         AuthToken accessToken = tokenProvider.createAuthToken(
                 userId,
                 ((UserPrincipal) authentication.getPrincipal()).getRoleType().getCode(),
@@ -101,6 +103,8 @@ public class AuthController {
         }
 
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
+        CookieUtil.deleteCookie(request, response,  ACCESS_TOKEN);
+        CookieUtil.addCookie(request, response , ACCESS_TOKEN, accessToken.getToken(), (int) (appProperties.getAuth().getTokenExpiry() / 60));
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(request,response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
