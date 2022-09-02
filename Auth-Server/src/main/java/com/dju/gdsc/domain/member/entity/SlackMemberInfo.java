@@ -12,6 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@ToString
 public class SlackMemberInfo {
     @Id
     private String slackUserId;

@@ -41,18 +41,23 @@ subprojects {
 
         annotationProcessor 'org.projectlombok:lombok'
         annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-        implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-        annotationProcessor(
-                "javax.persistence:javax.persistence-api",
-                "javax.annotation:javax.annotation-api",
-                "com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+        // querydsl
+        implementation 'com.querydsl:querydsl-core'
+        implementation 'com.querydsl:querydsl-jpa'
+        annotationProcessor 'com.querydsl:querydsl-apt::jpa'
+        annotationProcessor 'javax.persistence:javax.persistence-api'
+        annotationProcessor 'javax.annotation:javax.annotation-api'
     }
+
+
 
     test {
         useJUnitPlatform()
     }
+
+
 }
 
 /*

@@ -60,25 +60,6 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Member getUserId(String userId) {
-        Member member = memberRepository.findByUserId(userId);
-        SlackMemberInfo slackMemberInfo = slackMemberService.getSlackMemberByUserId(member);
-        if (slackMemberInfo != null) {
-
-            // deep copy
-            return Member.builder()
-                    .username(member.getUsername())
-                    .memberInfo(member.getMemberInfo())
-                    .userId(member.getUserId())
-                    .password(member.getPassword())
-                    .role(member.getRole())
-                    .memberInfo(member.getMemberInfo())
-                    .email(member.getEmail())
-                    .emailVerifiedYn(member.getEmailVerifiedYn())
-                    .modifiedAt(member.getModifiedAt())
-                    .profileImageUrl(slackMemberInfo.getProfileImage512())
-                    .providerType(member.getProviderType())
-                    .build();
-        }
         return memberRepository.findByUserId(userId);
     }
     @Transactional(readOnly = true)
