@@ -31,10 +31,8 @@ public class MemberRepositoryImpl implements CustomMemberRepository {
         QMember m = new QMember("m");
         QSlackMemberInfo s = new QSlackMemberInfo("s");
         QMemberInfo i = new QMemberInfo("i");
-        Tuple t = query.select(m, s, i)
+        Tuple t = query.select(m, s)
                 .from(m)
-                .leftJoin(i)
-                .on(m.eq(i.member))
                 .leftJoin(s)
                 .on(m.eq(s.userId)).where(m.userId.eq(id)).fetchOne();
 
@@ -45,7 +43,7 @@ public class MemberRepositoryImpl implements CustomMemberRepository {
                 Member.builder()
                 .userId(t.get(m).getUserId())
                 .email(t.get(m).getEmail())
-                .memberInfo(t.get(i))
+                .memberInfo(t.get(m).getMemberInfo())
                 .emailVerifiedYn(t.get(m).getEmailVerifiedYn())
                 .modifiedAt(t.get(m).getModifiedAt())
                 .profileImageUrl(t.get(m).getProfileImageUrl())
