@@ -6,6 +6,7 @@ version '1.0-SNAPSHOT'
 buildscript {
     ext {
         springBootVersion = '2.6.1'
+        queryDslVersion = "4.4.0"
     }
     repositories {
         mavenCentral()
@@ -40,14 +41,23 @@ subprojects {
 
         annotationProcessor 'org.projectlombok:lombok'
         annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+        // querydsl
+        implementation 'com.querydsl:querydsl-core'
+        implementation 'com.querydsl:querydsl-jpa'
+        annotationProcessor 'com.querydsl:querydsl-apt::jpa'
+        annotationProcessor 'javax.persistence:javax.persistence-api'
+        annotationProcessor 'javax.annotation:javax.annotation-api'
     }
+
+
 
     test {
         useJUnitPlatform()
     }
+
+
 }
 
 /*

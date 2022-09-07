@@ -58,7 +58,7 @@ public class MemberService {
     }
 
 
-
+    @Transactional(readOnly = true)
     public Member getUserId(String userId) {
         return memberRepository.findByUserId(userId);
     }
