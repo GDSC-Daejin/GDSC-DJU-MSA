@@ -85,7 +85,8 @@ public class RefreshController {
                 roleType.getCode(),
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
-
+        long tokenExpiry = appProperties.getAuth().getTokenExpiry();
+        long refreshExpiry = appProperties.getAuth().getRefreshTokenExpiry();
         long validTime = authRefreshToken.getTokenClaims().getExpiration().getTime() - now.getTime();
 
         // refresh 토큰 기간이 3일 이하로 남은 경우, refresh 토큰 갱신
@@ -101,11 +102,13 @@ public class RefreshController {
             // DB에 refresh 토큰 업데이트
             userRefreshToken.setRefreshToken(authRefreshToken.getToken());
             userRefreshTokenRepository.save(userRefreshToken);
+            int refreshCookieExpiry = (int) (refreshExpiry / 60);
             CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-            CookieUtil.addCookie(request,response, REFRESH_TOKEN, authRefreshToken.getToken(), (int) date.getTime());
+            CookieUtil.addCookie(request, response, REFRESH_TOKEN, authRefreshToken.getToken(), refreshCookieExpiry);
         }
+        int cookieExpiry = (int) (tokenExpiry/60);
         CookieUtil.deleteCookie(request, response, "Authorization");
-        CookieUtil.addCookie(request,response, "Authorization", newAccessToken.getToken(), (int) newAccessToken.getTokenClaims().getExpiration().getTime());
+        CookieUtil.addCookie(request,response, "Authorization", newAccessToken.getToken(), cookieExpiry);
         Map<String,String>  tokenMap = new HashMap<>();
         tokenMap.put("token", newAccessToken.getToken());
         return Response.success("data", tokenMap );
