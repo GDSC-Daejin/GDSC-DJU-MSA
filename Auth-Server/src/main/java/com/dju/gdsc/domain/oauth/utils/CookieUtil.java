@@ -31,20 +31,22 @@ public class CookieUtil {
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
+        // set allow credentials
         String domain = request.getServerName();
-        if(domain.contains("gdsc-dju.com")){
+        System.out.println("domain = " + domain);
+        System.out.println(request.getRequestURL().toString());
+        if(domain.contains("localhost") || domain.contains("127.0.0.1")){
+            addCookie(response, name, value, maxAge);
+        }else {
             cookie.setDomain("gdsc-dju.com");
-        }else if(domain.contains("localhost")){
-            cookie.setDomain("localhost");
-        }else if(domain.contains("127.0.0.1")){
-            cookie.setDomain("127.0.0.1");
+            response.addCookie(cookie);
         }
-        //cookie.setDomain("gdsc-dju.com");
-        response.addCookie(cookie);
+
+
+
     }
-    public static void addCookie(HttpServletResponse response, String name, String value, int maxAge , String domain) {
+    public static void addCookie(HttpServletResponse response, String name, String value, int maxAge ) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
-                .domain(domain)
                 .sameSite("None")
                 .secure(true)
                 .path("/")
