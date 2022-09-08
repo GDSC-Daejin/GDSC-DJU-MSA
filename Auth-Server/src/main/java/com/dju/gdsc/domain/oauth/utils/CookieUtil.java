@@ -31,9 +31,13 @@ public class CookieUtil {
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
-
-        if(request.getRequestURL().toString().contains("gdsc-dju.com")){
+        String domain = request.getServerName();
+        if(domain.contains("gdsc-dju.com")){
             cookie.setDomain("gdsc-dju.com");
+        }else if(domain.contains("localhost")){
+            cookie.setDomain("localhost");
+        }else if(domain.contains("127.0.0.1")){
+            cookie.setDomain("127.0.0.1");
         }
         //cookie.setDomain("gdsc-dju.com");
         response.addCookie(cookie);
