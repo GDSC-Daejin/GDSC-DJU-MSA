@@ -35,9 +35,10 @@ public class CookieUtil {
         String domain = request.getServerName();
         System.out.println("domain = " + domain);
         System.out.println(request.getRequestURL().toString());
-        if(domain.contains("localhost") || domain.contains("127.0.0.1") ||domain.contains("gdsc-dju.com")){
-            addCookie(response, name, value, maxAge);
-        }
+
+        addCookie(response, name, value, maxAge);
+
+
         /*else {
             cookie.setDomain("gdsc-dju.com");
             response.addCookie(cookie);
