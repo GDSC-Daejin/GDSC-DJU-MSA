@@ -35,16 +35,14 @@ public class CookieUtil {
         String domain = request.getServerName();
         System.out.println("domain = " + domain);
         System.out.println(request.getRequestURL().toString());
-
-        addCookie(response, name, value, maxAge);
-
-
-        /*else {
+        if(domain.contains("gdsc-dju.com")){
             cookie.setDomain("gdsc-dju.com");
             response.addCookie(cookie);
-        }*/
+        }else {
+            addCookie(response,name,value, maxAge);
+        }
 
-
+        //cookie.setDomain("gdsc-dju.com");
 
     }
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge ) {
