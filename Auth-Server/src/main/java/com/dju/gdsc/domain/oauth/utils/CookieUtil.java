@@ -55,6 +55,7 @@ public class CookieUtil {
         cookie.setMaxAge(maxAge);
         // url 에서 도메인 추출
         String domain = targetUrl.replace("http://","").replace("https://","").split("/")[0];
+        domain = domain.split(":")[0];
         log.info("domain : {}", domain);
         if(domain.contains("gdsc-dju.com")){
             cookie.setDomain("gdsc-dju.com");
