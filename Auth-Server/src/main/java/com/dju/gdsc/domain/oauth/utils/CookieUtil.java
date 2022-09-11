@@ -33,8 +33,6 @@ public class CookieUtil {
         cookie.setMaxAge(maxAge);
         // set allow credentials
         String domain = request.getServerName();
-        System.out.println("domain = " + domain);
-        System.out.println(request.getRequestURL().toString());
         if(domain.contains("gdsc-dju.com")){
             cookie.setDomain("gdsc-dju.com");
             response.addCookie(cookie);
@@ -48,6 +46,7 @@ public class CookieUtil {
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge ) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .sameSite("None")
+                .domain("gdsc-dju.com")
                 .secure(true)
                 .path("/")
                 .maxAge(maxAge)
