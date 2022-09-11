@@ -37,7 +37,7 @@ public class CookieUtil {
         String domain = request.getServerName();
         log.info("domain : {}", domain);
         if(domain.contains("gdsc-dju.com")){
-            cookie.setDomain("gdsc-dju.com");
+            cookie.setDomain(".gdsc-dju.com");
             log.info("cookie domain : {}",cookie.getDomain());
             response.addCookie(cookie);
         }else {
