@@ -122,7 +122,7 @@ public class RefreshController {
         long tokenExpiry = appProperties.getAuth().getTokenExpiry();
         int cookieExpiry = (int) (tokenExpiry/1000); // 초 단위로 변경
         CookieUtil.deleteCookie(request, response, "Authorization");
-        CookieUtil.addCookie(request,response, "Authorization", newAccessToken.getToken(), cookieExpiry);
+        CookieUtil.addCookie(request.getServerName(),response, "Authorization", newAccessToken.getToken(), cookieExpiry);
         Map<String,String>  tokenMap = new HashMap<>();
         tokenMap.put("token", newAccessToken.getToken());
         return Response.success("data", tokenMap );

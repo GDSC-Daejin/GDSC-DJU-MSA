@@ -40,17 +40,37 @@ public class CookieUtil {
             cookie.setDomain("gdsc-dju.com");
             log.info("cookie domain : {}",cookie.getDomain());
             response.addCookie(cookie);
-        }else {
-            addCookie(response,name,value, maxAge);
+        }else{
+            response.addCookie(cookie);
         }
 
         //cookie.setDomain("gdsc-dju.com");
 
     }
-    public static void addCookie(HttpServletResponse response, String name, String value, int maxAge ) {
+    public static void addCookie(String targetUrl,HttpServletResponse response, String name, String value, int maxAge) {
+
+        Cookie cookie = new Cookie(name, value);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(maxAge);
+        // url 에서 도메인 추출
+        String domain = targetUrl.replace("http://","").replace("https://","").split("/")[0];
+        log.info("domain : {}", domain);
+        if(domain.contains("gdsc-dju.com")){
+            cookie.setDomain("gdsc-dju.com");
+            log.info("cookie domain : {}",cookie.getDomain());
+            response.addCookie(cookie);
+        }else {
+            addCookie(response,name,value, maxAge , domain);
+        }
+
+        //cookie.setDomain("gdsc-dju.com");
+
+    }
+    public static void addCookie(HttpServletResponse response, String name, String value, int maxAge , String domain) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .sameSite("None")
-                .domain("localhost")
+                .domain(domain)
                 .secure(true)
                 .path("/")
                 .maxAge(maxAge)
