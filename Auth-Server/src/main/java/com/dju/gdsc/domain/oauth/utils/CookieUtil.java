@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Slf4j
 public class CookieUtil {
+    private static final String AUTHORIZATION = "Authorization";
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
@@ -51,7 +52,7 @@ public class CookieUtil {
 
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
-        cookie.setHttpOnly(true);
+        cookie.setHttpOnly(!AUTHORIZATION.equals(name));
         cookie.setMaxAge(maxAge);
         // url 에서 도메인 추출
         String domain = targetUrl.replace("http://","").replace("https://","").split("/")[0];
