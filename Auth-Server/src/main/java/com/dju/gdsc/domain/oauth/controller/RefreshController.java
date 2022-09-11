@@ -40,8 +40,24 @@ public class RefreshController {
     private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final static long THREE_DAYS_MSEC = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
-    @GetMapping("/refresh")
+    private final static String Authorization = "Authorization";
+    private String checkToken(HttpServletRequest request) {
+        String token = HeaderUtil.getAccessToken(request);
+        if (token == null) {
+            token = CookieUtil.getCookie(request, Authorization).isPresent() ? CookieUtil.getCookie(request, Authorization).get().getValue() : null;
+        }
+        return token;
+    }
+    private String checkRefreshToken(HttpServletRequest request) {
+        String token = HeaderUtil.getHeaderRefreshToken(request);
+        if (token == null) {
+            token = CookieUtil.getCookie(request, REFRESH_TOKEN).isPresent() ? CookieUtil.getCookie(request, REFRESH_TOKEN).get().getValue() : null;
+            log.info("refresh token from cookie := [{}]", token);
+        }
+        return token;
+    }
 
+    @GetMapping("/refresh")
     @Operation(summary = "refresh 토큰을 이용하여 JWT 토큰 재발급", description = "토큰이 expired 되어야 작동함")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "재발급 성공"),
@@ -49,8 +65,7 @@ public class RefreshController {
     })
     public Response refreshToken (HttpServletRequest request, HttpServletResponse response) {
         // access token 확인
-        String accessToken = HeaderUtil.getAccessToken(request);
-        AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
+        AuthToken authToken = tokenProvider.convertAuthToken(checkToken(request));
         if (!authToken.validateWithOutExpired()) {
             return Response.invalidAccessToken();
         }
@@ -65,7 +80,8 @@ public class RefreshController {
         RoleType roleType = RoleType.of(claims.get("role", String.class));
 
         // refresh token
-        String refreshToken = HeaderUtil.getHeaderRefreshToken(request);
+        //String refreshToken = HeaderUtil.getHeaderRefreshToken(request);
+        String refreshToken = checkRefreshToken(request);
         AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
         log.info("refreshToken: {}", refreshToken);
 
@@ -92,10 +108,8 @@ public class RefreshController {
         if (validTime <= THREE_DAYS_MSEC) {
             // refresh 토큰 설정
             long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
-            Date date =  new Date(now.getTime() + refreshTokenExpiry);
             authRefreshToken = tokenProvider.createAuthToken(
-                    appProperties.getAuth().getTokenSecret(),date
-
+                    appProperties.getAuth().getTokenSecret(),new Date(now.getTime() + refreshTokenExpiry)
             );
             long refreshmentExpiry = appProperties.getAuth().getRefreshTokenExpiry();
             int refreshCookieExpiry = (int) (refreshmentExpiry/1000);

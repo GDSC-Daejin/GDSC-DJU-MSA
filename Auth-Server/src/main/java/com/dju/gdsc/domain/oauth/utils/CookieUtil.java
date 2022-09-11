@@ -46,7 +46,6 @@ public class CookieUtil {
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge ) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .sameSite("None")
-                .domain("gdsc-dju.com")
                 .secure(true)
                 .path("/")
                 .maxAge(maxAge)
