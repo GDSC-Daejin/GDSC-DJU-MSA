@@ -120,7 +120,7 @@ public class RefreshController {
             userRefreshToken.setRefreshToken(authRefreshToken.getToken());
             userRefreshTokenRepository.save(userRefreshToken);
             CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-            CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), refreshCookieExpiry);
+            CookieUtil.addCookie(request,response, REFRESH_TOKEN, authRefreshToken.getToken(), refreshCookieExpiry);
         }
         long tokenExpiry = appProperties.getAuth().getTokenExpiry();
         int cookieExpiry = (int) (tokenExpiry/1000); // 초 단위로 변경

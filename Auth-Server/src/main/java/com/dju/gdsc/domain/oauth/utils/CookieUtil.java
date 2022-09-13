@@ -1,5 +1,6 @@
 package com.dju.gdsc.domain.oauth.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.util.SerializationUtils;
 
@@ -10,6 +11,7 @@ import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 public class CookieUtil {
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
@@ -33,8 +35,10 @@ public class CookieUtil {
         cookie.setMaxAge(maxAge);
         // set allow credentials
         String domain = request.getServerName();
+        log.info("domain : {}", domain);
         if(domain.contains("gdsc-dju.com")){
             cookie.setDomain("gdsc-dju.com");
+            log.info("cookie domain : {}",cookie.getDomain());
             response.addCookie(cookie);
         }else {
             addCookie(response,name,value, maxAge);
@@ -46,6 +50,7 @@ public class CookieUtil {
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge ) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .sameSite("None")
+                .domain("localhost")
                 .secure(true)
                 .path("/")
                 .maxAge(maxAge)
