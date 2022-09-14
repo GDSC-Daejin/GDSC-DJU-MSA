@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -16,11 +17,12 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class Oauth2Controller {
     private final Oauth2NotWebService oauth2NotWebService;
+
     @GetMapping("/auth/{provider}") //GOOGLE이 들어올 것이다.
     public Response socialLoginRedirect(@PathVariable String provider , @RequestParam String code,
-    HttpServletResponse response) throws IOException {
+                                        HttpServletResponse response , HttpServletRequest request) throws IOException {
         ProviderType providerType = ProviderType.valueOf(provider.toUpperCase());
-        oauth2NotWebService.signInByOAuth(providerType, code , response);
+        oauth2NotWebService.signInByOAuth(providerType, code , response, request);
         return Response.success("message", "SUCCESS" );
     }
 }

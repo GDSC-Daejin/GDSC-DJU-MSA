@@ -14,17 +14,12 @@ public interface MemberRepository extends JpaRepository<Member, Integer>, Custom
     //Optional<Member> findByEmail(String email);
     // Optional<Member> findByUsername(String username);
 
-    /*@Query("select m from Member m where m.role = 'MEMBER' or m.role = 'CORE' or m.role = 'LEAD'")
-    List<Member> findMember();
-    @Query("select m from Member m where m.role = 'GUEST'")
-    List<Member> findGUEST();*/
     List<Member> findMembersByRoleInAndMemberInfo_PhoneNumberIsNotNull(@Param("role") List<RoleType> roleTypes);
-    Member findByUserId(String id);
-    Optional<Member> findByProviderTypeAndUserId(ProviderType providerType, String userId);
     Member findByEmail(String email);
+    Optional<Member> findByProviderTypeAndUserId(ProviderType providerType, String userId);
+
     boolean existsByMemberInfo_Nickname(String updateNickname);
-    boolean existsByMemberInfo_NicknameAndMemberInfo_NicknameNot(String updateNickname , String nickname);
-    boolean deleteByEmail(String s);
+
 
     Optional<Member> findByMemberInfo_Nickname(String nickname);
 }

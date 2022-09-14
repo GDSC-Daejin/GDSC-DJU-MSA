@@ -40,7 +40,7 @@ public class RefreshController {
     private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final static long THREE_DAYS_MSEC = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
-    private final static String Authorization = "Authorization";
+    private final static String Authorization = "token";
     private String checkToken(HttpServletRequest request) {
         String token = HeaderUtil.getAccessToken(request);
         if (token == null) {
@@ -67,12 +67,14 @@ public class RefreshController {
         // access token 확인
         AuthToken authToken = tokenProvider.convertAuthToken(checkToken(request));
         if (!authToken.validateWithOutExpired()) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return Response.invalidAccessToken();
         }
         // refresh token 확인
         // expired access token 인지 확인
         Claims claims = authToken.getExpiredTokenClaims();
         if (claims == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return Response.notExpiredTokenYet();
         }
 
@@ -86,6 +88,7 @@ public class RefreshController {
         log.info("refreshToken: {}", refreshToken);
 
         if (!authRefreshToken.validate()) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return Response.invalidRefreshToken();
         }
 
@@ -121,8 +124,8 @@ public class RefreshController {
         }
         long tokenExpiry = appProperties.getAuth().getTokenExpiry();
         int cookieExpiry = (int) (tokenExpiry/1000); // 초 단위로 변경
-        CookieUtil.deleteCookie(request, response, "Authorization");
-        CookieUtil.addCookie(request,response, "Authorization", newAccessToken.getToken(), cookieExpiry);
+        CookieUtil.deleteCookie(request, response, Authorization);
+        CookieUtil.addCookie(request,response, Authorization, newAccessToken.getToken(), cookieExpiry);
         Map<String,String>  tokenMap = new HashMap<>();
         tokenMap.put("token", newAccessToken.getToken());
         return Response.success("data", tokenMap );

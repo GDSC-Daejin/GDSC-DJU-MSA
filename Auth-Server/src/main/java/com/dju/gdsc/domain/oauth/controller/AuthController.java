@@ -43,7 +43,7 @@ public class AuthController {
     private  final MemberService memberService;
     private final static long THREE_DAYS_MSEC = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
-    private final static String ACCESS_TOKEN = "Authorization";
+    private final static String ACCESS_TOKEN = "token";
 
 
 
@@ -97,7 +97,7 @@ public class AuthController {
             userRefreshTokenRepository.saveAndFlush(userRefreshToken);
         } else {
             // 여기서 업데이트 쿼리가 안나옴
-            // DB에 refresh 토큰 업데이트
+            // DB에 refresh 토큰 update
             userRefreshToken.setRefreshToken(refreshToken.getToken());
             userRefreshTokenRepository.saveAndFlush(userRefreshToken);
         }

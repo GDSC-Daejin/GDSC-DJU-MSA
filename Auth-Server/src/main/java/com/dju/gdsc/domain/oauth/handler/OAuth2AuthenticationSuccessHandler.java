@@ -45,6 +45,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final AppProperties appProperties;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
+    private static final String AUTHORIZATION = "token";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException, IOException {
@@ -115,12 +116,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         int cookieMaxAge = (int) refreshTokenExpiry / 1000;
         int tokenMaxAge = (int) tokenExpiry / 1000;
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-        CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
-        CookieUtil.deleteCookie(request, response, "Authorization");
-        CookieUtil.addCookie(response, "Authorization", accessToken.getToken(), tokenMaxAge);
+        CookieUtil.addCookie(targetUrl,response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
+        CookieUtil.deleteCookie(request, response, AUTHORIZATION);
+        CookieUtil.addCookie(targetUrl,response, AUTHORIZATION, accessToken.getToken(), tokenMaxAge);
         // 쿠키 저장
         return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("token", accessToken.getToken())
+                .queryParam(AUTHORIZATION, accessToken.getToken())
                 .queryParam("refreshToken", refreshToken.getToken())
                 .build().toUriString();
     }
