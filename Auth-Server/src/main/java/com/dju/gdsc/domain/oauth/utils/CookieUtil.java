@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Slf4j
 public class CookieUtil {
-    private static final String AUTHORIZATION = "Authorization";
+    private static final String AUTHORIZATION = "token";
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();

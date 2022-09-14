@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @Repository
@@ -30,7 +31,6 @@ public class MemberRepositoryImpl implements CustomMemberRepository {
 
         QMember m = new QMember("m");
         QSlackMemberInfo s = new QSlackMemberInfo("s");
-        QMemberInfo i = new QMemberInfo("i");
         Tuple t = query.select(m, s)
                 .from(m)
                 .leftJoin(s)
@@ -57,5 +57,18 @@ public class MemberRepositoryImpl implements CustomMemberRepository {
         }
         return returnMember;
 
+    }
+
+    public List<Member> findAll() {
+        JPAQueryFactory query = new JPAQueryFactory(em);
+
+        QMember m = new QMember("m");
+        QSlackMemberInfo s = new QSlackMemberInfo("s");
+        List<Tuple> t = query.select(m, s)
+                .from(m)
+                .leftJoin(s)
+                .on(m.eq(s.userId)).fetch();
+
+        return null;
     }
 }

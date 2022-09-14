@@ -31,7 +31,7 @@ public class Oauth2NotWebService {
     private final AuthTokenProvider tokenProvider;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final static String REFRESH_TOKEN = "refresh_token";
-    private final static String Authorization = "Authorization";
+    private final static String Authorization = "token";
     @Transactional
     public void signInByOAuth(final ProviderType provider, final String code , HttpServletResponse response , HttpServletRequest request)  {
         OAuth2UserInfo userInfo = oauth2Handler.getUserInfo(provider, code);

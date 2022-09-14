@@ -40,7 +40,7 @@ public class RefreshController {
     private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final static long THREE_DAYS_MSEC = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
-    private final static String Authorization = "Authorization";
+    private final static String Authorization = "token";
     private String checkToken(HttpServletRequest request) {
         String token = HeaderUtil.getAccessToken(request);
         if (token == null) {
@@ -124,8 +124,8 @@ public class RefreshController {
         }
         long tokenExpiry = appProperties.getAuth().getTokenExpiry();
         int cookieExpiry = (int) (tokenExpiry/1000); // 초 단위로 변경
-        CookieUtil.deleteCookie(request, response, "Authorization");
-        CookieUtil.addCookie(request.getServerName(),response, "Authorization", newAccessToken.getToken(), cookieExpiry);
+        CookieUtil.deleteCookie(request, response, Authorization);
+        CookieUtil.addCookie(request,response, Authorization, newAccessToken.getToken(), cookieExpiry);
         Map<String,String>  tokenMap = new HashMap<>();
         tokenMap.put("token", newAccessToken.getToken());
         return Response.success("data", tokenMap );

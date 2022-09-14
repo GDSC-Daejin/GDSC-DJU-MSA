@@ -66,12 +66,11 @@ public class MemberService {
     @Cacheable(cacheNames = "memberCaching", key = "#userId" , cacheManager = "ehCacheCacheManager")
     public MemberInfoResponseServerDto getMemberInfo(String userId) {
         Member member = memberRepository.findByUserId(userId);
-        SlackMemberInfo slackMemberInfo = slackMemberService.getSlackMemberByUserId(member);
         MemberInfoResponseServerDto memberInfoResponseServerDto = MemberInfoResponseServerDto.builder()
                 .userId(member.getUserId())
                 .nickname(member.getMemberInfo().getNickname())
                 .role(member.getRole())
-                .profileImageUrl(slackMemberInfo == null ? member.getProfileImageUrl() : slackMemberInfo.getProfileImage512())
+                .profileImageUrl(member.getProfileImageUrl())
                 .positionType(member.getMemberInfo().getPositionType())
                 .introduce(member.getMemberInfo().getIntroduce())
                 .build();

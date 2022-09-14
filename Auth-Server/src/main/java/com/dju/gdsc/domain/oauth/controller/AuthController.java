@@ -43,7 +43,7 @@ public class AuthController {
     private  final MemberService memberService;
     private final static long THREE_DAYS_MSEC = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
-    private final static String ACCESS_TOKEN = "Authorization";
+    private final static String ACCESS_TOKEN = "token";
 
 
 
