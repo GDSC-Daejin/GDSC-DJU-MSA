@@ -58,17 +58,5 @@ public class MemberRepositoryImpl implements CustomMemberRepository {
         return returnMember;
 
     }
-
-    public List<Member> findAll() {
-        JPAQueryFactory query = new JPAQueryFactory(em);
-
-        QMember m = new QMember("m");
-        QSlackMemberInfo s = new QSlackMemberInfo("s");
-        List<Tuple> t = query.select(m, s)
-                .from(m)
-                .leftJoin(s)
-                .on(m.eq(s.userId)).fetch();
-
-        return null;
-    }
+    
 }
