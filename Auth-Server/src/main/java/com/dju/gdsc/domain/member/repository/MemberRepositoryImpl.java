@@ -36,9 +36,9 @@ public class MemberRepositoryImpl implements CustomMemberRepository {
                 .leftJoin(s)
                 .on(m.eq(s.userId)).where(m.userId.eq(id)).fetchOne();
 
-        if (Objects.isNull(t)) {
+     /*   if (Objects.isNull(t)) {
             throw new IllegalArgumentException("해당 유저가 존재하지 않습니다.");
-        }
+        }*/
         Member returnMember =
                 Member.builder()
                 .userId(t.get(m).getUserId())

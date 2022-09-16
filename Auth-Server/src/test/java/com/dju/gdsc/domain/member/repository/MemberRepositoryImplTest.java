@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
@@ -34,7 +35,9 @@ public class MemberRepositoryImplTest {
         Member member = Member.builder()
                 .userId("test")
                 .email("g@mail.com")
+                .password("1234")
                 .emailVerifiedYn("Y")
+                .username("test")
                 .role(RoleType.MEMBER)
                 .profileImageUrl("test")
                 .build();
@@ -45,13 +48,16 @@ public class MemberRepositoryImplTest {
         jpaMemberInfoRepository.save(memberInfo);
 
         SlackMemberInfo slackMemberInfo = SlackMemberInfo.builder()
-                .userId(member)
+                .slackUserId("test")
+                .userId(savedMember)
                 .profileImage512("testSlack")
                 .build();
         slackMemberInfoRepository.save(slackMemberInfo);
 
         Member findMember = memberRepository.findByUserId(savedMember.getUserId());
         assertEquals(findMember.getUserId(), savedMember.getUserId());
+        assertEquals(findMember.getProfileImageUrl(), slackMemberInfo.getProfileImage512());
+        assertThrows(InvalidDataAccessApiUsageException.class, () -> memberRepository.findByUserId("test2"));
 
 
 
