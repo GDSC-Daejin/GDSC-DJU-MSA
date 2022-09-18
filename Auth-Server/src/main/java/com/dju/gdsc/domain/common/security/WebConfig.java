@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
-@Profile("!test") // 추후 테스트 코드에서 401 에러 구현 필요
+//@Profile("!test") // 추후 테스트 코드에서 401 에러 구현 필요
 public class WebConfig implements WebMvcConfigurer {
 
     private final TokenValidateInterceptor tokenValidateInterceptor;
