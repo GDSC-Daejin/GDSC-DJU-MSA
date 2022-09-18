@@ -2,5 +2,7 @@
 /build/**
 /.idea/**
 /src/main/resources/**
-Auth-Server/out/production/resources/application.properties
+**/out/production/resources/application.properties
 *.properties
+**/src/main/generated/**
+
