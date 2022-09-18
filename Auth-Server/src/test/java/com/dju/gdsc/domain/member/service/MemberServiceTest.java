@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dju.gdsc.domain.member.factory.MemberEntityFactory.getMember;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -38,23 +39,7 @@ public class MemberServiceTest {
     @Mock
     private JpaMemberInfoRepository jpaMemberInfoRepository;
 
-    private static Member getMember(String userId) {
-        Member m = Member.builder()
-                .userId(userId)
-                .email(userId + "@mail.com")
-                .password("1234")
-                .emailVerifiedYn("Y")
-                .username(userId + "test")
-                .role(RoleType.MEMBER)
-                .profileImageUrl("test")
-                .build();
-        MemberInfo mi = MemberInfo.builder()
-                .nickname(userId)
-                .build();
-        mi.setMember(m);
-        m.setMemberInfo(mi);
-        return m;
-    }
+
 
     @Test
     @DisplayName("회원 목록 조회")
