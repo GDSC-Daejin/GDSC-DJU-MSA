@@ -50,7 +50,11 @@ dependencies {
     implementation group: 'net.sf.ehcache', name: 'ehcache', version: '2.10.9.2'
     // slack
     implementation 'com.slack.api:slack-api-client:1.23.1'
-
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test' // 권한 관련
+    // test 관련 database
+    testRuntimeOnly 'com.h2database:h2:1.4.199'
 
 }
 

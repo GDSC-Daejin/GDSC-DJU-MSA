@@ -148,13 +148,6 @@ public class MemberService {
         return memberRepository.existsByMemberInfo_Nickname(nickname);
     }
 
-    @Transactional
-    public void deleteMemberForTest(String userId){
-        Member member = memberRepository.findByUserId(userId);
-        memberRepository.delete(member);
-    }
-
-
     public MemberInfoResponseServerDto getMemberInfoByNickname(String nickname) {
         Member member = memberRepository.findByMemberInfo_Nickname(nickname).orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다."));
         MemberInfoResponseServerDto memberInfoResponseServerDto = getMemberInfo(member.getUserId());

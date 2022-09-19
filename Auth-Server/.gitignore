@@ -3,3 +3,5 @@
 /.idea/**
 /src/main/resources/**
 /src/main/resources/application.properties
+/out/**
+/src/generated/**

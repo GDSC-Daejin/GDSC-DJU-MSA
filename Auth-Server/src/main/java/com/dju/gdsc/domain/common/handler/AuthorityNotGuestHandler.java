@@ -13,8 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public
-class AuthorityNotGuestHandler implements HandlerInterceptor {
+public class AuthorityNotGuestHandler implements HandlerInterceptor {
     private final AuthTokenProvider tokenProvider;
 
 
