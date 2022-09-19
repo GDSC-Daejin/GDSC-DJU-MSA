@@ -94,7 +94,7 @@ public class MemberApiControllerTest extends AbstractControllerTest {
     // Member 를 조회하면서 MemberInfo 를 조회하는데, MemberInfo 는 LAZY 로 설정되어있어서 쿼리가 나가지 않는다.
     // 그래서 @Transactional 을 붙여서 영속성 컨텍스트를 유지시켜줘야 한다.
     void update() throws Exception {
-        
+        // test commit
         //given
         MemberInfoRequestDto dto = MemberInfoRequestDto.builder()
                 .blogUrl("https://blog.naver.com/1234")
