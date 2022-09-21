@@ -122,7 +122,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // 쿠키 저장
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam(AUTHORIZATION, accessToken.getToken())
-                .queryParam("refreshToken", refreshToken.getToken())
                 .build().toUriString();
     }
 
