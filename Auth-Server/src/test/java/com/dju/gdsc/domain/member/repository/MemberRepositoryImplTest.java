@@ -54,10 +54,11 @@ public class MemberRepositoryImplTest {
                 .build();
         slackMemberInfoRepository.save(slackMemberInfo);
 
-        Member findMember = memberRepository.findByUserId(savedMember.getUserId());
+        Member findMember = memberRepository.findByUserIdWithSlack(savedMember.getUserId());
         assertEquals(findMember.getUserId(), savedMember.getUserId());
         assertEquals(findMember.getProfileImageUrl(), slackMemberInfo.getProfileImage512());
-        assertThrows(InvalidDataAccessApiUsageException.class, () -> memberRepository.findByUserId("test2"));
+        assertThrows(InvalidDataAccessApiUsageException.class, () -> memberRepository.findByUserIdWithSlack
+                ("test2"));
 
 
 

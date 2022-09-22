@@ -9,10 +9,12 @@ import com.dju.gdsc.domain.member.model.RoleType;
 import com.dju.gdsc.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j // 디버그를 위한 로그 설정
@@ -22,13 +24,20 @@ public class AdminService {
 
     private final MemberRepository repository;
     private final JpaWarnDescription jpaWarnDescription;
+    // 영속성 컨텍스트에 등록
     @Transactional
     public void 맴버권한수정(String userId, RoleType role){
+        // 영속성 컨텍스트 내부에 있는 객체를 가져옴
+
         Member member = repository.findByUserId(userId);
+        log.info("member : {}", member);
         // Validations
         validate(member);
 
         member.setRole(role);
+        member.setEmail("change@test.com");
+        // password null error https://java8.tistory.com/509
+
     }
 
     @Transactional(readOnly = true)

@@ -20,6 +20,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer>, Custom
 
     boolean existsByMemberInfo_Nickname(String updateNickname);
 
+    Member findByUserId(String id);
 
     Optional<Member> findByMemberInfo_Nickname(String nickname);
 }
