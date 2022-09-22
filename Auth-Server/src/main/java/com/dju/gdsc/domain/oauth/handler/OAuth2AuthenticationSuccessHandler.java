@@ -130,8 +130,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 cookieMaxAge);
         // 쿠키 저장
         return UriComponentsBuilder.fromUriString(targetUrl)
-                //.queryParam(AUTHORIZATION, accessToken.getToken())
-                //.queryParam("refreshToken", refreshToken.getToken())
+                .queryParam(AUTHORIZATION, accessToken.getToken())
                 .build().toUriString();
     }
 
