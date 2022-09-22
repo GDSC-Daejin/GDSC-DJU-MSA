@@ -24,9 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN;
 
@@ -106,11 +108,10 @@ public class RefreshController {
         );
 
         long validTime = authRefreshToken.getTokenClaims().getExpiration().getTime() - now.getTime();
-
+        long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
         // refresh 토큰 기간이 3일 이하로 남은 경우, refresh 토큰 갱신
         if (validTime <= THREE_DAYS_MSEC) {
             // refresh 토큰 설정
-            long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
             authRefreshToken = tokenProvider.createAuthToken(
                     appProperties.getAuth().getTokenSecret(),new Date(now.getTime() + refreshTokenExpiry)
             );
@@ -122,10 +123,17 @@ public class RefreshController {
             CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
             CookieUtil.addCookie(request,response, REFRESH_TOKEN, authRefreshToken.getToken(), refreshCookieExpiry);
         }
-        long tokenExpiry = appProperties.getAuth().getTokenExpiry();
+        long tokenExpiry =appProperties.getAuth().getRefreshTokenExpiry();
         int cookieExpiry = (int) (tokenExpiry/1000); // 초 단위로 변경
         CookieUtil.deleteCookie(request, response, Authorization);
         CookieUtil.addCookie(request,response, Authorization, newAccessToken.getToken(), cookieExpiry);
+        CookieUtil.deleteCookie(request, response, "expires_in");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        CookieUtil.addCookie(request, response,
+                "expires_in" ,
+                sdf.format(new Date(now.getTime() + refreshTokenExpiry)),
+                cookieExpiry);
         Map<String,String>  tokenMap = new HashMap<>();
         tokenMap.put("token", newAccessToken.getToken());
         return Response.success("data", tokenMap );

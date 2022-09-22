@@ -28,9 +28,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import static com.dju.gdsc.domain.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN;
@@ -118,7 +120,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(targetUrl,response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
         CookieUtil.deleteCookie(request, response, AUTHORIZATION);
-        CookieUtil.addCookie(targetUrl,response, AUTHORIZATION, accessToken.getToken(), tokenMaxAge);
+        CookieUtil.addCookie(targetUrl,response, AUTHORIZATION, accessToken.getToken(), cookieMaxAge);
+        CookieUtil.deleteCookie(request, response, "expires_in");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        CookieUtil.addCookie(request, response,
+                "expires_in" ,
+                sdf.format(new Date(now.getTime() + refreshTokenExpiry)),
+                cookieMaxAge);
         // 쿠키 저장
         return UriComponentsBuilder.fromUriString(targetUrl)
                 //.queryParam(AUTHORIZATION, accessToken.getToken())
