@@ -14,6 +14,7 @@ import java.util.Optional;
 @Slf4j
 public class CookieUtil {
     private static final String AUTHORIZATION = "token";
+    private static final String EXPIRES = "expires_in";
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
@@ -52,15 +53,16 @@ public class CookieUtil {
 
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
-        cookie.setHttpOnly(!AUTHORIZATION.equals(name));
+        cookie.setHttpOnly(!AUTHORIZATION.equals(name) && !EXPIRES.equals(name));
         cookie.setMaxAge(maxAge);
         // url 에서 도메인 추출
         String domain = targetUrl.replace("http://","").replace("https://","").split("/")[0];
         domain = domain.split(":")[0];
-        log.info("domain : {}", domain);
+        log.info("IN domain : {}", domain);
         if(domain.contains("gdsc-dju.com")){
             cookie.setDomain("gdsc-dju.com");
-            log.info("cookie domain : {}",cookie.getDomain());
+            log.info("name : {}" , name);
+            log.info("cookie domain : {}",cookie.getDomain() + "\n");
             response.addCookie(cookie);
         }else {
             addCookie(response,name,value, maxAge , domain);

@@ -60,12 +60,12 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Member getUserId(String userId) {
-        return memberRepository.findByUserId(userId);
+        return memberRepository.findByUserIdWithSlack(userId);
     }
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = "memberCaching", key = "#userId" , cacheManager = "ehCacheCacheManager")
     public MemberInfoResponseServerDto getMemberInfo(String userId) {
-        Member member = memberRepository.findByUserId(userId);
+        Member member = memberRepository.findByUserIdWithSlack(userId);
         MemberInfoResponseServerDto memberInfoResponseServerDto = MemberInfoResponseServerDto.builder()
                 .userId(member.getUserId())
                 .nickname(member.getMemberInfo().getNickname())

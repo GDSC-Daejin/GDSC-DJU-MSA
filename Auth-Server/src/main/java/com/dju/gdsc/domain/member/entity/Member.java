@@ -6,11 +6,13 @@ import com.dju.gdsc.domain.member.dto.MemberResponseDto;
 import com.dju.gdsc.domain.member.model.RoleType;
 import com.dju.gdsc.domain.oauth.entity.ProviderType;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -43,6 +45,7 @@ public class Member {
     String username;
     @Schema(description = "회원 비밀번호" , example = "$10$8lDyClwH.ET3BA44inQLKuRNISg4paTPwgD2V5pw/RMmtTGJvhPvy")
     @Column(nullable = false)
+    @JsonIgnore
     String password;
     @Schema(description = "회원 이메일" , example = "23@gmail.com")
     @Column(nullable = false)
@@ -115,7 +118,7 @@ public class Member {
         return new MemberResponseDto(this.profileImageUrl);
     }
 
-    @Override
+    /*@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
@@ -126,5 +129,5 @@ public class Member {
     @Override
     public int hashCode() {
         return getClass().hashCode();
-    }
+    }*/
 }

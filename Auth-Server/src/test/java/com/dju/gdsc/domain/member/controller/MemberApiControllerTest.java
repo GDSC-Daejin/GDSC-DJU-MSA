@@ -6,6 +6,7 @@ import com.dju.gdsc.domain.member.dto.MemberInfoRequestDto;
 import com.dju.gdsc.domain.member.entity.Member;
 import com.dju.gdsc.domain.member.entity.MemberInfo;
 import com.dju.gdsc.domain.member.model.PositionType;
+import com.dju.gdsc.domain.member.model.RoleType;
 import com.dju.gdsc.domain.member.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -58,7 +59,7 @@ public class MemberApiControllerTest extends AbstractControllerTest {
         mvc = MockMvcBuilders.webAppContextSetup(context).addFilters(new CharacterEncodingFilter("UTF-8", true))  // 필터 추가
                 .alwaysDo(print())
                 .build();
-        Member memberRole = getMember("test");
+        Member memberRole = getMember("test" , RoleType.MEMBER);
         memberRepository.save(memberRole);
     }
 

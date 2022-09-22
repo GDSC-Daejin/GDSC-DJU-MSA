@@ -6,14 +6,14 @@ import com.dju.gdsc.domain.member.model.RoleType;
 import com.dju.gdsc.domain.oauth.entity.ProviderType;
 
 public class MemberEntityFactory {
-    public static Member getMember(String userId) {
+    public static Member getMember(String userId , RoleType roleType) {
         Member m = Member.builder()
                 .userId(userId)
                 .email(userId + "@mail.com")
                 .password("1234")
                 .emailVerifiedYn("Y")
                 .username(userId + "test")
-                .role(RoleType.MEMBER)
+                .role(roleType)
                 .providerType(ProviderType.GOOGLE)
                 .profileImageUrl("test")
                 .build();
@@ -24,4 +24,5 @@ public class MemberEntityFactory {
         m.setMemberInfo(mi);
         return m;
     }
+
 }

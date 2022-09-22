@@ -44,8 +44,8 @@ public class MemberServiceTest {
     @Test
     @DisplayName("회원 목록 조회")
     void 멤버리스트() {
-        Member member = getMember("test");
-        Member member2 = getMember("test2");
+        Member member = getMember("test" ,RoleType.MEMBER);
+        Member member2 = getMember("test2", RoleType.MEMBER);
         //given(memberRepository.saveAll(Arrays.asList(member, member2))).willReturn(Arrays.asList(member, member2));
         when(memberRepository.findAll()).thenReturn(Arrays.asList(member, member2));
         List<Member> members = memberService.멤버리스트();
@@ -60,7 +60,7 @@ public class MemberServiceTest {
 
     @Test
     void getUserId() {
-        Member member = getMember("test");
+        Member member = getMember("test" , RoleType.MEMBER);
         when(memberRepository.findByUserId(member.getUserId())).thenReturn(member);
         Member findMember = memberService.getUserId(member.getUserId());
         assertEquals(member.getUserId(), findMember.getUserId());
@@ -68,8 +68,8 @@ public class MemberServiceTest {
 
     @Test
     void getMemberInfo() {
-        Member member = getMember("test");
-        when(memberRepository.findByUserId(member.getUserId())).thenReturn(member);
+        Member member = getMember("test" , RoleType.MEMBER);
+        when(memberRepository.findByUserIdWithSlack(member.getUserId())).thenReturn(member);
         MemberInfoResponseServerDto findMember = memberService.getMemberInfo(member.getUserId());
         assertEquals(member.getUserId(), findMember.getUserId());
         System.out.println("findMember = " + findMember);
@@ -84,7 +84,7 @@ public class MemberServiceTest {
     @DisplayName("Service : Member Info update")
     void 정보업데이트() {
         // Given
-        Member member = getMember("test");
+        Member member = getMember("test" , RoleType.MEMBER);
         MemberInfoRequestDto memberInfoRequestDto = MemberInfoRequestDto.builder()
                 .blogUrl("https://blog.naver.com/test")
                 .etcUrl("test")
@@ -121,7 +121,7 @@ public class MemberServiceTest {
         // 중복이면 false return , 중복이 아니면 true return
         // Given
 
-        Member member = getMember("test");
+        Member member = getMember("test" , RoleType.MEMBER);
         memberRepository.save(member);
         // When
         boolean result = memberService.닉네임중복검사(member.getMemberInfo().getNickname());
@@ -134,9 +134,9 @@ public class MemberServiceTest {
     @Test
     void getMemberInfoByNickname() {
         // Given
-        Member member = getMember("test");
+        Member member = getMember("test" , RoleType.MEMBER);
         when(memberRepository.findByMemberInfo_Nickname("test")).thenReturn(Optional.of(member));
-        when(memberRepository.findByUserId(member.getUserId())).thenReturn(member);
+        when(memberRepository.findByUserIdWithSlack(member.getUserId())).thenReturn(member);
         // When
         MemberInfoResponseServerDto memberInfoResponseServerDto = memberService.getMemberInfoByNickname(member.getMemberInfo().getNickname());
         // Then

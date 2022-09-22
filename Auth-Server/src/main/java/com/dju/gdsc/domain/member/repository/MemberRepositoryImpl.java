@@ -8,6 +8,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Arrays;
@@ -25,7 +26,10 @@ public class MemberRepositoryImpl implements CustomMemberRepository {
     }
 
     // 이 아래 작성
-    public Member findByUserId(String id) {
+    // read only 따라서 트랜잭션 필요 없음
+    // 따라서 영속성 컨텍스트에 저장되지 않음
+    // 그렇기 때문에 해당 메소드를 사용하는 경우 set 값을 통해 데이터 베이스에 저장되지 않음
+    public Member findByUserIdWithSlack(String id) {
         // querydsl 사용
         JPAQueryFactory query = new JPAQueryFactory(em);
 
