@@ -124,7 +124,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         CookieUtil.deleteCookie(request, response, "expires_in");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        CookieUtil.addCookie(request, response,
+        CookieUtil.addCookie(targetUrl, response,
                 "expires_in" ,
                 sdf.format(new Date(now.getTime() + refreshTokenExpiry)),
                 cookieMaxAge);
