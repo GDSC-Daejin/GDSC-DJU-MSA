@@ -116,7 +116,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
         userRefreshTokenRepository.saveAndFlush(userRefreshToken);
         int cookieMaxAge = (int) refreshTokenExpiry / 1000;
-        int tokenMaxAge = (int) tokenExpiry / 1000;
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(targetUrl,response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
         CookieUtil.deleteCookie(request, response, AUTHORIZATION);
@@ -126,7 +125,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         CookieUtil.addCookie(targetUrl, response,
                 "expires_in" ,
-                sdf.format(new Date(now.getTime() + tokenMaxAge)),
+                sdf.format(new Date(now.getTime() + tokenExpiry)),
                 cookieMaxAge);
         // 쿠키 저장
         return UriComponentsBuilder.fromUriString(targetUrl)
