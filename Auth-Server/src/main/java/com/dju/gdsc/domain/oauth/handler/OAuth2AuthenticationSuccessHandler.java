@@ -126,7 +126,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         CookieUtil.addCookie(targetUrl, response,
                 "expires_in" ,
-                sdf.format(new Date(now.getTime() + refreshTokenExpiry)),
+                sdf.format(new Date(now.getTime() + tokenMaxAge)),
                 cookieMaxAge);
         // 쿠키 저장
         return UriComponentsBuilder.fromUriString(targetUrl)
