@@ -33,7 +33,7 @@ public class CookieUtil {
 
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
-        cookie.setHttpOnly(true);
+        cookie.setHttpOnly(!AUTHORIZATION.equals(name) && !EXPIRES.equals(name));
         cookie.setMaxAge(maxAge);
         // set allow credentials
         String domain = request.getServerName();
