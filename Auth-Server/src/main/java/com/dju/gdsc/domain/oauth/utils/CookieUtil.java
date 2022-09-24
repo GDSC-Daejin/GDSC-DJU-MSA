@@ -15,6 +15,7 @@ import java.util.Optional;
 public class CookieUtil {
     private static final String AUTHORIZATION = "token";
     private static final String EXPIRES = "expires_in";
+    private static final String SERVER_NAME = "gdsc-dju.com";
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
@@ -38,8 +39,8 @@ public class CookieUtil {
         // set allow credentials
         String domain = request.getServerName();
         log.info("domain : {}", domain);
-        if(domain.contains("gdsc-dju.com")){
-            cookie.setDomain("gdsc-dju.com");
+        if(domain.contains(SERVER_NAME)){
+            cookie.setDomain(SERVER_NAME);
             log.info("cookie domain : {}",cookie.getDomain());
             response.addCookie(cookie);
         }else{
@@ -59,8 +60,8 @@ public class CookieUtil {
         String domain = targetUrl.replace("http://","").replace("https://","").split("/")[0];
         domain = domain.split(":")[0];
         log.info("IN domain : {}", domain);
-        if(domain.contains("gdsc-dju.com")){
-            cookie.setDomain("gdsc-dju.com");
+        if(domain.contains(SERVER_NAME)){
+            cookie.setDomain(SERVER_NAME);
             log.info("name : {}" , name);
             log.info("cookie domain : {}",cookie.getDomain() + "\n");
             response.addCookie(cookie);

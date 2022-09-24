@@ -12,6 +12,7 @@ import com.dju.gdsc.domain.oauth.token.AuthToken;
 import com.dju.gdsc.domain.oauth.token.AuthTokenProvider;
 import com.dju.gdsc.domain.oauth.utils.CookieUtil;
 import com.dju.gdsc.domain.common.properties.AppProperties;
+import com.dju.gdsc.domain.oauth.utils.JwtCookieUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -119,15 +120,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         int tokenMaxAge = (int) tokenExpiry / 1000;
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(targetUrl,response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
-        CookieUtil.deleteCookie(request, response, AUTHORIZATION);
-        CookieUtil.addCookie(targetUrl,response, AUTHORIZATION, accessToken.getToken(), cookieMaxAge);
-        CookieUtil.deleteCookie(request, response, "expires_in");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        CookieUtil.addCookie(targetUrl, response,
-                "expires_in" ,
-                sdf.format(new Date(now.getTime() + refreshTokenExpiry)),
-                cookieMaxAge);
+
+        JwtCookieUtil.authCookieGenerate(request, response, accessToken, cookieMaxAge);
         // 쿠키 저장
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam(AUTHORIZATION, accessToken.getToken())

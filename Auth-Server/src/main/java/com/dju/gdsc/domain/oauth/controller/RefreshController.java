@@ -10,14 +10,13 @@ import com.dju.gdsc.domain.oauth.utils.CookieUtil;
 import com.dju.gdsc.domain.oauth.utils.HeaderUtil;
 import com.dju.gdsc.domain.common.dto.Response;
 import com.dju.gdsc.domain.common.properties.AppProperties;
+import com.dju.gdsc.domain.oauth.utils.JwtCookieUtil;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,8 +28,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
-
-import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN;
 
 @RestController
 @RequestMapping
@@ -125,15 +122,9 @@ public class RefreshController {
         }
         long tokenExpiry =appProperties.getAuth().getRefreshTokenExpiry();
         int cookieExpiry = (int) (tokenExpiry/1000); // 초 단위로 변경
-        CookieUtil.deleteCookie(request, response, Authorization);
-        CookieUtil.addCookie(request,response, Authorization, newAccessToken.getToken(), cookieExpiry);
-        CookieUtil.deleteCookie(request, response, "expires_in");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        CookieUtil.addCookie(request, response,
-                "expires_in" ,
-                sdf.format(new Date(now.getTime() + refreshTokenExpiry)),
-                cookieExpiry);
+
+        
+        JwtCookieUtil.authCookieGenerate(request, response, newAccessToken, cookieExpiry);
         Map<String,String>  tokenMap = new HashMap<>();
         tokenMap.put("token", newAccessToken.getToken());
         return Response.success("data", tokenMap );
