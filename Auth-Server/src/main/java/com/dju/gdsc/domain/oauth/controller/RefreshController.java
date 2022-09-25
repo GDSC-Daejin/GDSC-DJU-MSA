@@ -121,9 +121,8 @@ public class RefreshController {
             CookieUtil.addCookie(request,response, REFRESH_TOKEN, authRefreshToken.getToken(), refreshCookieExpiry);
         }
         long tokenExpiry =appProperties.getAuth().getRefreshTokenExpiry();
+        long accessTokenExpiry = appProperties.getAuth().getTokenExpiry();
         int cookieExpiry = (int) (tokenExpiry/1000); // 초 단위로 변경
-
-        
         JwtCookieUtil.authCookieGenerate(request, response, newAccessToken, cookieExpiry);
         Map<String,String>  tokenMap = new HashMap<>();
         tokenMap.put("token", newAccessToken.getToken());

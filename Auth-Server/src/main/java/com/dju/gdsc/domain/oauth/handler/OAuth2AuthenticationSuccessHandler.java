@@ -117,10 +117,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
         userRefreshTokenRepository.saveAndFlush(userRefreshToken);
         int cookieMaxAge = (int) refreshTokenExpiry / 1000;
-        int tokenMaxAge = (int) tokenExpiry / 1000;
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-        CookieUtil.addCookie(targetUrl,response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
-
+        CookieUtil.addCookie(request,response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
         JwtCookieUtil.authCookieGenerate(request, response, accessToken, cookieMaxAge);
         // 쿠키 저장
         return UriComponentsBuilder.fromUriString(targetUrl)
