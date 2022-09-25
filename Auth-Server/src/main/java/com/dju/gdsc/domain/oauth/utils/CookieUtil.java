@@ -40,8 +40,9 @@ public class CookieUtil {
         String domain = request.getServerName();
         log.info(request.toString());
         log.info("domain : {}", domain);
-        cookie.setDomain(SERVER_NAME);
+
         if(domain.contains(SERVER_NAME)){
+            cookie.setDomain(SERVER_NAME);
             log.info("cookie domain : {}",cookie.getDomain());
             response.addCookie(cookie);
         }else{
