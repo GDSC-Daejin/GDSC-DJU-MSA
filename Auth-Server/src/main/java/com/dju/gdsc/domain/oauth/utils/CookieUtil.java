@@ -50,28 +50,6 @@ public class CookieUtil {
         //cookie.setDomain("gdsc-dju.com");
 
     }
-    public static void addCookie(String targetUrl,HttpServletResponse response, String name, String value, int maxAge) {
-
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setHttpOnly(!AUTHORIZATION.equals(name) && !EXPIRES.equals(name));
-        cookie.setMaxAge(maxAge);
-        // url 에서 도메인 추출
-        String domain = targetUrl.replace("http://","").replace("https://","").split("/")[0];
-        domain = domain.split(":")[0];
-        log.info("IN domain : {}", domain);
-        if(domain.contains(SERVER_NAME)){
-            cookie.setDomain(SERVER_NAME);
-            log.info("name : {}" , name);
-            log.info("cookie domain : {}",cookie.getDomain() + "\n");
-            response.addCookie(cookie);
-        }else {
-            addCookie(response,name,value, maxAge , domain);
-        }
-
-        //cookie.setDomain("gdsc-dju.com");
-
-    }
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge , String domain) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .sameSite("None")

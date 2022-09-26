@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SupportDto {
+    // TODO : DTO Static 변수로 변경
     @Builder.Default
     boolean frontend = false;
     @Builder.Default
