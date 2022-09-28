@@ -61,7 +61,7 @@ public class MemberServiceTest {
     @Test
     void getUserId() {
         Member member = getMember("test" , RoleType.MEMBER);
-        when(memberRepository.findByUserId(member.getUserId())).thenReturn(member);
+        when(memberRepository.findByUserIdWithSlack(member.getUserId())).thenReturn(member);
         Member findMember = memberService.getUserId(member.getUserId());
         assertEquals(member.getUserId(), findMember.getUserId());
     }
