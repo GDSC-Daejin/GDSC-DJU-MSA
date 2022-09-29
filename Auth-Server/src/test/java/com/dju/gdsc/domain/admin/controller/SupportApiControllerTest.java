@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,10 @@ class SupportApiControllerTest extends AbstractControllerTest {
                 .build();
         Admin = getMember("ADMIN_USER_ID", RoleType.LEAD);
         memberRepository.save(Admin);
+    }
+    @AfterEach
+    void tearDown() {
+        memberRepository.deleteAll();
     }
 
     @Test
