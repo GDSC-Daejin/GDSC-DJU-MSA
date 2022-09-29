@@ -63,7 +63,7 @@ class SupportApiControllerTest extends AbstractControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.frontend").value(false))
+                .andExpect(jsonPath("$.data.frontend").value(true))
                 .andDo(print());
 
     }
