@@ -31,6 +31,13 @@ class AdminServiceTest {
 
     @Test
     void 맴버권한수정() {
+        // given
+        Member member = MemberEntityFactory.getMember("test", RoleType.MEMBER);
+        when(memberRepository.findByUserId(member.getUserId())).thenReturn((member));
+        // when
+        adminService.맴버권한수정(member.getUserId(), RoleType.CORE);
+        // then
+        assertEquals(member.getRole(), RoleType.CORE);
 
     }
 
