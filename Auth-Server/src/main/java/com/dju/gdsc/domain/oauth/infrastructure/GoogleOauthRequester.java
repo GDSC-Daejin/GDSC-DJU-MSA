@@ -2,15 +2,14 @@ package com.dju.gdsc.domain.oauth.infrastructure;
 
 import com.dju.gdsc.domain.oauth.entity.ProviderType;
 import com.dju.gdsc.domain.oauth.exception.Oauth2UserInfoNotFoundExeption;
-import com.dju.gdsc.domain.oauth.info.OAuth2UserInfo;
-import com.dju.gdsc.domain.oauth.info.impl.GoogleOAuth2UserInfo;
+import com.dju.gdsc.domain.oauth.handler.info.OAuth2UserInfo;
+import com.dju.gdsc.domain.oauth.handler.info.impl.GoogleOAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import javax.ws.rs.core.MultivaluedMap;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

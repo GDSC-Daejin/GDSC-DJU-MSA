@@ -35,7 +35,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Tag(name = "사용자 인증 api controller", description = "사용자 인증 api")
 public class AuthController {
-
     private final AppProperties appProperties;
     private final AuthTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;

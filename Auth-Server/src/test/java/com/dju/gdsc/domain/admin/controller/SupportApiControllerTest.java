@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,10 @@ class SupportApiControllerTest extends AbstractControllerTest {
         Admin = getMember("ADMIN_USER_ID", RoleType.LEAD);
         memberRepository.save(Admin);
     }
+    @AfterEach
+    void tearDown() {
+        memberRepository.deleteAll();
+    }
 
     @Test
     void list() throws Exception {
@@ -58,7 +63,7 @@ class SupportApiControllerTest extends AbstractControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.frontend").value(false))
+                .andExpect(jsonPath("$.data.frontend").value(true))
                 .andDo(print());
 
     }

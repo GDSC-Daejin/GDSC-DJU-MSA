@@ -8,12 +8,11 @@ import com.dju.gdsc.domain.member.repository.MemberRepository;
 import com.dju.gdsc.domain.oauth.entity.ProviderType;
 import com.dju.gdsc.domain.oauth.entity.UserPrincipal;
 import com.dju.gdsc.domain.oauth.exception.OAuthProviderMissMatchException;
-import com.dju.gdsc.domain.oauth.info.OAuth2UserInfo;
-import com.dju.gdsc.domain.oauth.info.OAuth2UserInfoFactory;
+import com.dju.gdsc.domain.oauth.handler.info.OAuth2UserInfo;
+import com.dju.gdsc.domain.oauth.handler.info.OAuth2UserInfoFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 

@@ -7,7 +7,7 @@ import com.dju.gdsc.domain.oauth.dto.TokenResponseDto;
 import com.dju.gdsc.domain.oauth.entity.ProviderType;
 import com.dju.gdsc.domain.oauth.entity.UserRefreshToken;
 import com.dju.gdsc.domain.oauth.handler.Oauth2Handler;
-import com.dju.gdsc.domain.oauth.info.OAuth2UserInfo;
+import com.dju.gdsc.domain.oauth.handler.info.OAuth2UserInfo;
 import com.dju.gdsc.domain.oauth.repository.UserRefreshTokenRepository;
 import com.dju.gdsc.domain.oauth.token.AuthToken;
 import com.dju.gdsc.domain.oauth.token.AuthTokenProvider;

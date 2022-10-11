@@ -1,7 +1,7 @@
 package com.dju.gdsc.domain.oauth.handler;
 
 import com.dju.gdsc.domain.oauth.entity.ProviderType;
-import com.dju.gdsc.domain.oauth.info.OAuth2UserInfo;
+import com.dju.gdsc.domain.oauth.handler.info.OAuth2UserInfo;
 import com.dju.gdsc.domain.oauth.infrastructure.OauthRequester;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
