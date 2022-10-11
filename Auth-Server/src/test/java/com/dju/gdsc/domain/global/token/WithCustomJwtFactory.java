@@ -18,4 +18,10 @@ public class WithCustomJwtFactory {
         AuthToken authToken = authTokenProvider.createAuthToken(userId, role, new Date(now.getTime() + expiredTime));
         return authToken.getToken();
     }
+    public static AuthToken createToken(String userId , String role , long expiredTime) {
+        AuthTokenProvider authTokenProvider = ApplicationContextProvider.getApplicationContext()
+                .getBean(AuthTokenProvider.class);
+        Date now = new Date();
+        return authTokenProvider.createAuthToken(userId, role, new Date(now.getTime() + expiredTime));
+    }
 }

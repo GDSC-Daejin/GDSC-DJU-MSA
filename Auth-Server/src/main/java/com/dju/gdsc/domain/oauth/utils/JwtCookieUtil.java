@@ -1,13 +1,14 @@
 package com.dju.gdsc.domain.oauth.utils;
 
 import com.dju.gdsc.domain.oauth.token.AuthToken;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-
+@Slf4j
 public class JwtCookieUtil {
    private final static String Authorization = "token";
    public static void authCookieGenerate(HttpServletRequest request , HttpServletResponse response , AuthToken authToken , int cookieExpiry ){
@@ -18,7 +19,7 @@ public class JwtCookieUtil {
       sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
       CookieUtil.addCookie(request, response,
               "expires_in" ,
-              sdf.format(authToken.getTokenClaims().get("exp")),
+              sdf.format(authToken.getTokenClaims().getExpiration()),
               cookieExpiry);
 
    }
