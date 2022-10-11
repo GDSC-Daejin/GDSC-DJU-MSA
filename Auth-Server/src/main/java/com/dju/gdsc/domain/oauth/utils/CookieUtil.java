@@ -38,7 +38,9 @@ public class CookieUtil {
         cookie.setMaxAge(maxAge);
         // set allow credentials
         String domain = request.getServerName();
+        log.info(request.toString());
         log.info("domain : {}", domain);
+
         if(domain.contains(SERVER_NAME)){
             cookie.setDomain(SERVER_NAME);
             log.info("cookie domain : {}",cookie.getDomain());
