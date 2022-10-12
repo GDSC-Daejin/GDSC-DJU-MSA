@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,24 +44,46 @@ public class MemberRepositoryImpl implements CustomMemberRepository {
         if (Objects.isNull(t)) {
             throw new IllegalArgumentException("해당 유저가 존재하지 않습니다.");
         }
-        Member returnMember =
-                Member.builder()
-                .userId(t.get(m).getUserId())
-                .email(t.get(m).getEmail())
-                .memberInfo(t.get(m).getMemberInfo())
-                .emailVerifiedYn(t.get(m).getEmailVerifiedYn())
-                .modifiedAt(t.get(m).getModifiedAt())
-                .profileImageUrl(t.get(m).getProfileImageUrl())
-                .providerType(t.get(m).getProviderType())
-                .role(t.get(m).getRole())
-                .uploadDate(t.get(m).getUploadDate())
-                .username(t.get(m).getUsername())
-                .build();
-        if(t.get(s) != null) {
-            returnMember.setProfileImageUrl(Objects.requireNonNull(t.get(s)).getProfileImage512());
-        }
-        return returnMember;
+        return createMemberDto(m, s, t);
+    }
+
+    @Override
+    public List<Member> findMembersWithSlack() {
+        JPAQueryFactory query = new JPAQueryFactory(em);
+
+        QMember m = new QMember("m");
+        QSlackMemberInfo s = new QSlackMemberInfo("s");
+        List<Tuple> t = query.select(m, s)
+                .from(m)
+                .leftJoin(s)
+                .on(m.eq(s.userId)).fetch();
+        List<Member> returnMembers = new java.util.ArrayList<>(Collections.emptyList());
+        t.forEach(tuple -> {
+            Member returnMember  = createMemberDto(m, s, tuple);
+            returnMembers.add(returnMember);
+        });
+        return returnMembers;
 
     }
-    
+
+    private Member createMemberDto(QMember m, QSlackMemberInfo s, Tuple tuple) {
+        Member returnMember =
+                Member.builder()
+                        .userId(tuple.get(m).getUserId())
+                        .email(tuple.get(m).getEmail())
+                        .memberInfo(tuple.get(m).getMemberInfo())
+                        .emailVerifiedYn(tuple.get(m).getEmailVerifiedYn())
+                        .modifiedAt(tuple.get(m).getModifiedAt())
+                        .profileImageUrl(tuple.get(m).getProfileImageUrl())
+                        .providerType(tuple.get(m).getProviderType())
+                        .role(tuple.get(m).getRole())
+                        .uploadDate(tuple.get(m).getUploadDate())
+                        .username(tuple.get(m).getUsername())
+                        .build();
+        if(tuple.get(s) != null) {
+            returnMember.setProfileImageUrl(Objects.requireNonNull(tuple.get(s)).getProfileImage512());
+        }
+        return returnMember;
+    }
+
 }

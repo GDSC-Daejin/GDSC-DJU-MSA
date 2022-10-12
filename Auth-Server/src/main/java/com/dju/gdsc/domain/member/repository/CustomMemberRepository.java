@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface CustomMemberRepository {
     Member findByUserIdWithSlack(String id);
+    List<Member> findMembersWithSlack();
 }

@@ -50,9 +50,9 @@ class AdminServiceTest {
         Member core = MemberEntityFactory.getMember("core", RoleType.CORE);
         // When
         List<RoleType> roleTypes = new ArrayList<>();
-        roleTypes.add(RoleType.MEMBER);
         roleTypes.add(RoleType.CORE);
         roleTypes.add(RoleType.LEAD);
+        roleTypes.add(RoleType.MEMBER);
         when(memberRepository.findMembersByRoleInAndMemberInfo_PhoneNumberIsNotNull(roleTypes)).thenReturn(Arrays.asList(admin));
         // Then
         List<Member> members = adminService.멤버목록();

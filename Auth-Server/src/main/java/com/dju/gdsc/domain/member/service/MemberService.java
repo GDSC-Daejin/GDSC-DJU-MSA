@@ -79,8 +79,8 @@ public class MemberService {
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = "memberCaching", cacheManager = "ehCacheCacheManager")
     public List<MemberInfoResponseServerDto> getMemberInfos() {
-        List<Member> members = memberRepository.findAll();
-        List<SlackMemberInfo> slackMemberInfos = slackMemberService.getSlackMember();
+        List<Member> members = memberRepository.findMembersWithSlack();
+        /*List<SlackMemberInfo> slackMemberInfos = slackMemberService.getSlackMember();
         List<MemberInfoResponseServerDto> memberInfoResponseServerDto = members.stream().map(member ->
                 slackMemberInfos.stream().filter(slackMemberInfo -> slackMemberInfo.getUserId().equals(member))
                         .map(slackMemberInfo -> MemberInfoResponseServerDto.builder()
@@ -96,8 +96,17 @@ public class MemberService {
                                 .role(member.getRole())
                                 .profileImageUrl(member.getProfileImageUrl())
                                 .build())
-                ).collect(Collectors.toList());
-        return memberInfoResponseServerDto;
+                ).collect(Collectors.toList());*/
+        return members.stream()
+                .map(member -> MemberInfoResponseServerDto.builder()
+                        .userId(member.getUserId())
+                        .nickname(member.getMemberInfo().getNickname())
+                        .role(member.getRole())
+                        .profileImageUrl(member.getProfileImageUrl())
+                        .positionType(member.getMemberInfo().getPositionType())
+                        .introduce(member.getMemberInfo().getIntroduce())
+                        .build())
+                .collect(Collectors.toList());
     }
     @Transactional
     @CacheEvict(value = "memberCaching", allEntries = true)
