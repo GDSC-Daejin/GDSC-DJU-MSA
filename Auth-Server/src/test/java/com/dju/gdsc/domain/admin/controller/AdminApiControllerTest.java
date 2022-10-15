@@ -24,6 +24,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static com.dju.gdsc.domain.member.factory.MemberEntityFactory.getMember;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -52,6 +53,7 @@ class AdminApiControllerTest extends AbstractControllerTest {
         Admin = getMember("ADMIN_USER_ID", RoleType.LEAD);
         memberRepository.save(Admin);
     }
+
     @AfterEach
     void tearDown() {
         memberRepository.deleteAll();
@@ -85,7 +87,19 @@ class AdminApiControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void retrieveUserList() {
+    @DisplayName("API : GET ALL USER LIST  관리자가 전체 회원 리스트를 조회할 수 있다.")
+    @WithMockUser(username = "ADMIN_USER_ID", roles = "LEAD")
+    void retrieveUserList() throws Exception {
+        Member member = getMember("GUEST_USER_ID", RoleType.GUEST);
+        memberRepository.save(member);
+        // Token
+        String accessToken = WithCustomJwtFactory.create(Admin.getUserId(), Admin.getRole().getCode(), 10000L);
+        mvc.perform(
+                        get("/member-route/api/admin/v1/all/list")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer " + accessToken)
+                ).andExpect(status().isOk())
+                .andDo(print());
     }
 
     @Test
