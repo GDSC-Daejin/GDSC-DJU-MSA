@@ -35,7 +35,6 @@ public class AdminService {
         validate(member);
 
         member.setRole(role);
-        member.setEmail("change@test.com");
         // password null error https://java8.tistory.com/509
 
     }
