@@ -18,7 +18,7 @@ public class MemberPublicController {
     @GetMapping("/api/v1/memberInfo/{nickname}")
     @Cacheable(key = "#nickname" , cacheNames = "memberCaching")
     public Response getMemberInfoByNickname(@PathVariable String nickname) {
-        return Response.success("memberInfo", memberService.getMemberInfoByNickname(nickname));
+        return Response.success("data", memberService.getMemberInfoByNickname(nickname));
     }
 
 }
