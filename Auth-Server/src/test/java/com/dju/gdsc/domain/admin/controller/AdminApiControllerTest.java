@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import java.util.Map;
+
 import static com.dju.gdsc.domain.member.factory.MemberEntityFactory.getMember;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -82,8 +84,35 @@ class AdminApiControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk());
         //then
         Member findMember = memberRepository.findByUserId(member.getUserId());
-        System.out.println(findMember);
         assertEquals(RoleType.MEMBER, findMember.getRole());
+    }
+    @Test
+    @DisplayName("API-BadRequest : Update Role  관리자가 회원 권한을 변경할 수 있다.")
+    @WithMockUser(username = "ADMIN_USER_ID", roles = "LEAD")
+    void updateRole_BadRequest() throws Exception {
+        // given
+        Member member = getMember("GUEST_USER_ID", RoleType.GUEST);
+        memberRepository.save(member);
+
+        Map<String , Object> memberUpdateDto = Map.of(
+                "userId", member.getUserId(),
+                "role", "ADMIN"
+        );
+        // Token
+        String accessToken = WithCustomJwtFactory.create(Admin.getUserId(), Admin.getRole().getCode(), 10000L);
+        //when
+        mvc.perform(
+                        put("/member-route/api/admin/v1/update/role")
+                                .header("Authorization", "Bearer " + accessToken)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(memberUpdateDto))
+                )
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+        //then
+        // badrequest 가 발생하면 권한이 변경되지 않는다.
+        Member findMember = memberRepository.findByUserId(member.getUserId());
+        assertEquals(RoleType.GUEST, findMember.getRole());
     }
 
     @Test

@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.constraints.Pattern;
+
 @Data
 @Builder
 public class MemberRoleUpdateDto {
