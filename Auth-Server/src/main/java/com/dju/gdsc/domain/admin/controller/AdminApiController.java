@@ -17,12 +17,16 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/member-route/api/admin")
 @RequiredArgsConstructor
+@Validated
 public class AdminApiController {
 
     private final AdminService adminService;
@@ -36,7 +40,7 @@ public class AdminApiController {
             @ApiResponse(responseCode = "400", description = "조회 실패")
     })
     @PutMapping("v1/update/role")
-    public Response<?> updateRole(@RequestBody MemberRoleUpdateDto memberRoleUpdateDto){
+    public Response<?> updateRole(@Valid @RequestBody MemberRoleUpdateDto memberRoleUpdateDto){
         String userId = memberRoleUpdateDto.getUserId();
         RoleType role = memberRoleUpdateDto.getRole();
         adminService.맴버권한수정(userId, role);
