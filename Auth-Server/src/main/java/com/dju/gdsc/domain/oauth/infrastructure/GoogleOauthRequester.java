@@ -22,6 +22,7 @@ public class GoogleOauthRequester implements OauthRequester {
     private String GOOGLE_SNS_LOGIN_URL;
     @Value("${oauth2.google.token.url}")
     private String GOOGLE_TOKEN_REQUEST_URL;
+    // 'accounts.google.com', '/o/oauth2/v2/auth'
     @Value("${oauth2.google.info.url}")
     private String GOOGLE_SNS_INFO_URL;
 
@@ -55,8 +56,8 @@ public class GoogleOauthRequester implements OauthRequester {
         Map<String, Object> params = new HashMap<>();
         params.put("code", code);
         params.put("client_id", GOOGLE_SNS_CLIENT_ID);
-        params.put("client_secret", GOOGLE_SNS_CLIENT_SECRET);
-        params.put("redirect_uri", GOOGLE_SNS_CALLBACK_URL);
+        //params.put("client_secret", GOOGLE_SNS_CLIENT_SECRET);
+        params.put("redirect_uri", GOOGLE_SNS_CALLBACK_URL+":/");
         params.put("grant_type", "authorization_code");
 
 
