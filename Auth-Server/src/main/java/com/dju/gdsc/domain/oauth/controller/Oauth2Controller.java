@@ -22,7 +22,7 @@ public class Oauth2Controller {
     public Response socialLoginRedirect(@PathVariable String provider , @RequestParam String code,
                                         HttpServletResponse response , HttpServletRequest request) throws IOException {
         ProviderType providerType = ProviderType.valueOf(provider.toUpperCase());
-        oauth2NotWebService.signInByOAuth(providerType, code , response, request);
-        return Response.success("message", "SUCCESS" );
+        
+        return Response.success("data", oauth2NotWebService.signInByOAuth(providerType, code ));
     }
 }
