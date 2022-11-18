@@ -86,7 +86,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 멤버 info 도 같이 만들기
         return memberRepository.saveAndFlush(user);
     }
-    @CachePut(cacheNames = "memberCaching", key = "#userInfo.id")
+   
     public Member updateUser(Member user, OAuth2UserInfo userInfo) {
         if (userInfo.getName() != null && !user.getUsername().equals(userInfo.getName())) {
             user.setUsername(userInfo.getName());
