@@ -15,7 +15,7 @@ import java.util.Optional;
 public class CookieUtil {
     private static final String AUTHORIZATION = "token";
     private static final String EXPIRES = "expires_in";
-    private static final String SERVER_NAME = "gdsc-dju.com";
+    private static final String SERVER_NAME = "gdscdju.dev";
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
